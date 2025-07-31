@@ -1,0 +1,20 @@
+@keyframes slideInM1Q1 {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.notificationBar {
+  transform: translateY(-100%);
+  opacity: 0;
+  transition: transform 0.4s ease-out, opacity 0.4s ease-out;
+}
+
+.slideIn {
+  animation: slideInM1Q1 0.4s ease-out forwards;
+}

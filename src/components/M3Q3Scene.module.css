@@ -1,0 +1,8 @@
+.notificationBar {
+  transform: translateY(-100%);
+  transition: transform 0.5s ease-out;
+}
+
+.slideInM3Q3 {
+  transform: translateY(0);
+}

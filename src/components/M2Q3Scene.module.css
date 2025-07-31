@@ -1,0 +1,13 @@
+.notificationBar {
+    transform: translateY(-100%);
+    transition: transform 0.5s ease-in-out;
+}
+
+@keyframes slideInM2Q3 {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(0); }
+}
+
+.slideInM2Q3 {
+  animation: slideInM2Q3 0.5s ease-in-out forwards;
+}

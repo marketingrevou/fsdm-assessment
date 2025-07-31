@@ -1,0 +1,14 @@
+@keyframes slideInM2Q6 {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(0); }
+}
+
+.notificationBar {
+  transform: translateY(-100%);
+  opacity: 1; /* Changed from 0 to 1 to ensure visibility */
+}
+
+.slideInM2Q6 {
+  animation: slideInM2Q6 0.5s ease-out forwards;
+  opacity: 1; /* Ensure full opacity when animated */
+}
