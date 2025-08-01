@@ -112,19 +112,19 @@ const ClosingScene: React.FC<ClosingSceneProps> = ({ userName }) => {
         
         {/* Question */}
         <p className="text-black text-sm sm:text-base mt-2">
-          Tim Counselor kami akan menjelaskan lebih lanjut potensi kamu di Digital Marketing!
+          Admission Counselor kami akan menjelaskan lebih lanjut potensi kamu di Digital Marketing.
         </p>
       </div>
       
       {/* Bottom CTA */}
       <div className="w-full max-w-md mx-auto p-4 relative z-10">
         <Link 
-          href="https://wa.me/6283120911271" 
+          href="https://wa.me/6281399100086" 
           target="_blank"
           rel="noopener noreferrer"
           className="block w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-8 rounded-lg transition duration-200 text-center"
         >
-          Hubungi Kami di WhatsApp
+          Hubungi Admission Counselor Segera
         </Link>
       </div>
     </div>
