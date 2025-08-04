@@ -25,6 +25,7 @@ const ChatScene: React.FC<ChatSceneProps> = ({ userData, onBack, onNext }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isTyping, setIsTyping] = useState(false);
   const [showInvitation, setShowInvitation] = useState(false);
+  const [isBotResponding, setIsBotResponding] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const nextId = useRef(100); // Start with a high number to avoid collisions
 
@@ -80,6 +81,8 @@ const ChatScene: React.FC<ChatSceneProps> = ({ userData, onBack, onNext }) => {
 
   // Handle user response
   const handleResponse = (response: string) => {
+    if (isBotResponding) return; // Prevent multiple responses while bot is responding
+    
     const newMessage: Message = {
       id: nextId.current++,
       text: response,
@@ -88,9 +91,10 @@ const ChatScene: React.FC<ChatSceneProps> = ({ userData, onBack, onNext }) => {
     };
     
     setMessages(prev => [...prev, newMessage]);
+    setIsBotResponding(true);
     
     // Find the current bot message that has responses
-    const currentBotMessage = [...messages].reverse().find(
+    const currentBotMessage = [...messages, newMessage].reverse().find(
       (msg) => msg.sender === 'bot' && msg.responses
     );
     
@@ -110,7 +114,11 @@ const ChatScene: React.FC<ChatSceneProps> = ({ userData, onBack, onNext }) => {
           if (!nextMessage.responses && nextMessage.id < conversation.length) {
             const followingMessage = conversation.find(msg => msg.id === nextMessage.id + 1);
             if (followingMessage) {
-              setTimeout(() => setMessages(prev => [...prev, followingMessage]), 1000);
+              setTimeout(() => {
+                setMessages(prev => [...prev, followingMessage]);
+                setIsBotResponding(false);
+              }, 1000);
+              return;
             }
           }
           
@@ -118,8 +126,19 @@ const ChatScene: React.FC<ChatSceneProps> = ({ userData, onBack, onNext }) => {
           if (nextMessage.showInvitation) {
             setTimeout(() => setShowInvitation(true), 1000);
           }
+          
+          // Re-enable responses if the next message expects a response
+          if (nextMessage.responses) {
+            setIsBotResponding(false);
+          }
         }, 1000);
+      } else {
+        // If no next message, re-enable responses
+        setIsBotResponding(false);
       }
+    } else {
+      // If no current bot message found, re-enable responses
+      setIsBotResponding(false);
     }
   };
 
@@ -269,11 +288,12 @@ const ChatScene: React.FC<ChatSceneProps> = ({ userData, onBack, onNext }) => {
               </button>
               <div className={styles.responseButtons}>
                 {lastBotMessageWithResponses.responses?.map((response, index) => (
-                  <div key={index} className={styles.responseButton}>
+                  <div key={index} className={`${styles.responseButton} ${isBotResponding ? styles.disabledButton : ''}`}>
                     <span className={styles.responseText}>{response}</span>
                     <button
-                      onClick={() => handleResponse(response)}
+                      onClick={() => !isBotResponding && handleResponse(response)}
                       className={styles.sendButton}
+                      disabled={isBotResponding}
                     >
                       <FaPaperPlane />
                     </button>

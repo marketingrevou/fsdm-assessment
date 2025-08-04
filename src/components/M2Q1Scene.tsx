@@ -20,7 +20,7 @@ const M2Q1Scene: React.FC<M2Q1SceneProps> = ({ userName, onBack, onNext }) => {
   const [previousValue, setPreviousValue] = useState<number | null>(null);
   const [waitingForOperand, setWaitingForOperand] = useState(false);
   const [calculationHistory, setCalculationHistory] = useState('');
-  const fullText = "Yuk kita mulai Meeting ke-2! Saatnya kita hitung-hitungan nih. Kamu bisa gunakan kalkulator dibawah untuk menjawab.";
+  const fullText = "Saatnya kita hitung-hitungan nih. Kamu bisa gunakan kalkulator dibawah untuk menjawab. ⚠️ Pastikan jawab dengan benar, karena tidak ada pilihan kembali ya ";
 
   useEffect(() => {
     const sceneTimer = setTimeout(() => setIsVisible(true), 100);
@@ -192,12 +192,7 @@ const M2Q1Scene: React.FC<M2Q1SceneProps> = ({ userName, onBack, onNext }) => {
 
       {/* Bottom Navigation */}
       <div className="w-full max-w-md mx-auto p-4 z-10 bg-[#FFDE3D] fixed bottom-0 left-0 right-0">
-        <div className="flex flex-row gap-4 w-full">
-          <button 
-            onClick={onBack}
-            className="h-12 w-12 bg-white hover:bg-gray-100 text-gray-800 font-semibold rounded-lg transition duration-200 flex items-center justify-center flex-none shadow-md">
-            <FaArrowLeft className="w-4 h-4" />
-          </button>
+        <div className="flex flex-row justify-center w-full">
           <button 
             onClick={() => {
               // Normalize the display value by removing trailing zeros and decimal points

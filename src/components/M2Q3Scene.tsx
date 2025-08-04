@@ -88,12 +88,7 @@ const M2Q3Scene: React.FC<M2Q3SceneProps> = ({ userName, onBack, onNext }) => {
 
       {/* Bottom Navigation */}
       <div className="w-full max-w-md mx-auto p-4 z-10 bg-[#FFDE3D] fixed bottom-0 left-0 right-0">
-        <div className="flex flex-row gap-4 w-full">
-          <button 
-            onClick={onBack}
-            className="h-12 w-12 bg-white hover:bg-gray-100 text-gray-800 font-semibold rounded-lg transition duration-200 flex items-center justify-center flex-none shadow-md">
-            <FaArrowLeft className="w-4 h-4" />
-          </button>
+        <div className="flex flex-row justify-center w-full">
           <button 
             onClick={handleNext}
             disabled={!selectedOption}

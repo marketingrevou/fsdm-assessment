@@ -352,6 +352,12 @@
   overflow: hidden;
 }
 
+.responseButton.disabledButton {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 .responseText {
   flex-grow: 1;
   text-align: left;
