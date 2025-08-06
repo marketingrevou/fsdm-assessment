@@ -199,7 +199,7 @@ const M2Q2Scene: React.FC<M2Q2SceneProps> = ({ onBack, onNext }) => {
               onNext(score);
             }}
             className='flex-1 h-12 text-white font-semibold rounded-lg transition duration-200 flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 shadow-md'>
-            Selanjutnya
+            Kirim Jawaban
             <FaArrowRight className="w-4 h-4" />
           </button>
         </div>

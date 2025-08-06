@@ -20,7 +20,7 @@ const M2Q1Scene: React.FC<M2Q1SceneProps> = ({ userName, onBack, onNext }) => {
   const [previousValue, setPreviousValue] = useState<number | null>(null);
   const [waitingForOperand, setWaitingForOperand] = useState(false);
   const [calculationHistory, setCalculationHistory] = useState('');
-  const fullText = "Saatnya kita hitung-hitungan nih. Kamu bisa gunakan kalkulator dibawah untuk menjawab. ⚠️ Pastikan jawab dengan benar, karena tidak ada pilihan kembali ya ";
+  const fullText = "Saatnya kita hitung-hitungan nih. Gunakan kalkulator dibawah untuk menjawab, jangan lupa dikirim ya. ⚠️ Pastikan jawab dengan benar, karena tidak ada pilihan kembali ya ";
 
   useEffect(() => {
     const sceneTimer = setTimeout(() => setIsVisible(true), 100);
@@ -201,7 +201,7 @@ const M2Q1Scene: React.FC<M2Q1SceneProps> = ({ userName, onBack, onNext }) => {
               onNext(score);
             }}
             className='flex-1 h-12 text-white font-semibold rounded-lg transition duration-200 flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 shadow-md'>
-            Selanjutnya
+            Kirim Jawaban
             <FaArrowRight className="w-4 h-4" />
           </button>
         </div>

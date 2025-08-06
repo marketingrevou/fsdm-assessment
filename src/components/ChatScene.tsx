@@ -2,16 +2,23 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faCheckDouble, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FaPaperPlane } from 'react-icons/fa';
+
+import IntroPopup from './IntroPopup';
 import Image from 'next/image';
 import styles from './ChatScene.module.css';
 import QuizResultPopup from './QuizResultPopup';
+
+interface ResponseOption {
+  text: string;
+  className?: string;
+}
 
 interface Message {
   id: number;
   text: string;
   sender: 'user' | 'bot';
   timestamp: Date;
-  responses?: string[];
+  responses?: (string | ResponseOption)[];
   showInvitation?: boolean;
 }
 
@@ -26,6 +33,7 @@ const ChatScene: React.FC<ChatSceneProps> = ({ userData, onBack, onNext }) => {
   const [isTyping, setIsTyping] = useState(false);
   const [showInvitation, setShowInvitation] = useState(false);
   const [isBotResponding, setIsBotResponding] = useState(false);
+  const [showIntroPopup, setShowIntroPopup] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const nextId = useRef(100); // Start with a high number to avoid collisions
 
@@ -49,21 +57,24 @@ const ChatScene: React.FC<ChatSceneProps> = ({ userData, onBack, onNext }) => {
       text: 'Tujuan bisnis kami 6 bulan ke depan:\n1. Meningkatkan interaksi online dengan pelanggan.\n2. Membangun kesadaran merek yang lebih luas di daerah lokal.\n3. Meningkatkan penjualan di toko fisik kami hingga 20%!',
       sender: 'bot',
       timestamp: new Date(),
-      responses: ['Menarik sekali, apakah anda sudah punya Social Media?']
+      responses: [{ text: 'Menarik sekali, apakah anda sudah punya Social Media?' }]
     },
     { 
       id: 4,
       text: 'Kami memiliki website sederhana, akun Instagram dan daftar email dengan interaksi yang lumayan',
       sender: 'bot',
       timestamp: new Date(),
-      responses: ['Apakah sudah punya anggaran untuk marketing?']
+      responses: [{ text: 'Apakah sudah punya anggaran untuk marketing?' }]
     },
     { 
       id: 5,
       text: `Sudah, Anggaran kami ada di Rp.5.000.000 per bulan, apakah ${userData?.name || 'Anda'} bisa membantu?`,
       sender: 'bot',
       timestamp: new Date(),
-      responses: ['Tentu saja!']
+      responses: [{
+        text: 'Tentu saja!',
+        className: 'tentuSajaButton'
+      }]
     },
     { 
       id: 6,
@@ -143,6 +154,10 @@ const ChatScene: React.FC<ChatSceneProps> = ({ userData, onBack, onNext }) => {
   };
 
   // Handle proceeding to meeting cover
+  const handleCloseIntroPopup = () => {
+    setShowIntroPopup(false);
+  };
+
   const handleProceedToMeeting = () => {
     setShowInvitation(false);
     // Call onNext if provided, otherwise use default navigation
@@ -208,6 +223,7 @@ const ChatScene: React.FC<ChatSceneProps> = ({ userData, onBack, onNext }) => {
 
   return (
     <div className={styles.chatContainer}>
+      {showIntroPopup && <IntroPopup onClose={handleCloseIntroPopup} />}
       {/* Chat header */}
       <div className={styles.chatHeader}>
         <button onClick={onBack} className={styles.backButton}>
@@ -242,7 +258,7 @@ const ChatScene: React.FC<ChatSceneProps> = ({ userData, onBack, onNext }) => {
             <div
               className={`${styles.messageBubble} ${
                 message.sender === 'user' ? styles.userBubble : styles.clientBubble
-              }`}
+              } ${message.text.length > 20 ? styles['force-wrap'] : ''}`}
             >
               {message.text.split('\n').map((line, i) => (
                 <p key={i} className={styles.messageText}>
@@ -287,18 +303,26 @@ const ChatScene: React.FC<ChatSceneProps> = ({ userData, onBack, onNext }) => {
                 <FontAwesomeIcon icon={faPlus} />
               </button>
               <div className={styles.responseButtons}>
-                {lastBotMessageWithResponses.responses?.map((response, index) => (
-                  <div key={index} className={`${styles.responseButton} ${isBotResponding ? styles.disabledButton : ''}`}>
-                    <span className={styles.responseText}>{response}</span>
-                    <button
-                      onClick={() => !isBotResponding && handleResponse(response)}
-                      className={styles.sendButton}
-                      disabled={isBotResponding}
+                {lastBotMessageWithResponses.responses?.map((response, index) => {
+                  const responseText = typeof response === 'string' ? response : response.text;
+                  const responseClass = typeof response === 'string' ? '' : response.className || '';
+                  
+                  return (
+                    <div 
+                      key={index} 
+                      className={`${styles.responseButton} ${responseClass ? styles[responseClass] : ''} ${isBotResponding ? styles.disabledButton : ''}`}
                     >
-                      <FaPaperPlane />
-                    </button>
-                  </div>
-                ))}
+                      <span className={styles.responseText}>{responseText}</span>
+                      <button
+                        onClick={() => !isBotResponding && handleResponse(responseText)}
+                        className={styles.sendButton}
+                        disabled={isBotResponding}
+                      >
+                        <FaPaperPlane />
+                      </button>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>

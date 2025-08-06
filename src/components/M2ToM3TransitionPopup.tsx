@@ -33,7 +33,7 @@ const M2ToM3TransitionPopup: React.FC<M2ToM3TransitionPopupProps> = ({ userName,
         </div>
         
         <div className="text-base sm:text-lg text-gray-700 mb-6 sm:mb-8 leading-relaxed font-medium">
-          Wah, diskusi kita hari ini sangat mencerahkan! Sejauh ini saya sangat terbantu, terimakasih {userName}! Tapi kita masih punya 1 meeting lagi, sampai jumpa!
+          Wah, diskusi kita hari ini sangat mencerahkan! Sejauh ini saya sangat terbantu, terima kasih {userName}! Tapi kita masih punya 1 meeting lagi, sampai jumpa!
         </div>
         
         <button 

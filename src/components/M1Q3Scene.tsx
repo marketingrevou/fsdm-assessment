@@ -117,7 +117,7 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
               <span className="text-xl sm:text-2xl">🤔</span>
             </div>
             <p className="text-base font-medium flex-1 text-left">
-              Temukan kombinasi paling tepat. Drag & Drop pilihanmu.
+              Hint: Drag & Drop pilihanmu. Temukan kombinasi paling tepat. 
             </p>
           </div>
         </div>
