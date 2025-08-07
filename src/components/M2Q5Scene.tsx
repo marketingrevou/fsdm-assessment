@@ -171,8 +171,7 @@ const M2Q5Scene: React.FC<M2Q5SceneProps> = ({ onBack, onNext }) => {
           <div className="w-full lg:w-2/5">
             <div className="bg-white rounded-2xl shadow-2xl p-2 lg:p-2">
               <div className="text-right text-gray-500 text-xs lg:text-sm mb-1 pr-2 h-4 lg:h-4 truncate">{calculationHistory || ' '}</div>
-              <div className="text-right text-black font-light mb-1 lg:mb-2 pr-2 text-8
-              xl sm:text-5xl lg:text-6xl xl:text-7xl overflow-x-auto whitespace-nowrap">{display}</div>
+              <div className="text-right text-black font-light mb-1 lg:mb-2 pr-2 text-5xl sm:text-6xl lg:text-7xl xl:text-8xl overflow-x-auto whitespace-nowrap">{display}</div>
               <div className="grid grid-cols-4 gap-1 lg:gap-1">
                 <button className={`${buttonBaseClasses} ${buttonSizeClasses} bg-gray-300 text-black`} onClick={handleClearClick}>C</button>
                 <button className={`${buttonBaseClasses} ${buttonSizeClasses} bg-gray-300 text-black`} onClick={handleToggleSignClick}>+/-</button>

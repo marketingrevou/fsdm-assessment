@@ -66,8 +66,8 @@ const M1Q1Scene: React.FC<M1Q1SceneProps> = ({ onBack, onNext }) => {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-grow w-full max-w-md mx-auto flex flex-col pt-20 px-4 pb-4 overflow-y-auto">
-        <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-lg flex-grow flex flex-col">
+      <div className="flex-grow w-full flex items-center justify-center p-4 pt-24">
+        <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-lg w-full max-w-md">
           <p className="text-gray-800 text-base sm:text-lg mb-4 text-center font-medium">
             Kami punya banyak foto dan video produk yang bagus-bagus nih di Kafe Kami.
           </p>
@@ -86,7 +86,7 @@ const M1Q1Scene: React.FC<M1Q1SceneProps> = ({ onBack, onNext }) => {
             Media Sosial mana sih yang paling cocok buat kami pamer foto dan video yang indah ini?
           </p>
           
-          <div className="grid grid-cols-2 gap-4 mt-auto">
+          <div className="grid grid-cols-2 gap-4">
             {[
               { id: 'instagram', name: 'Instagram', logo: '/M1Q1/Instagram_icon.png' },
               { id: 'linkedin', name: 'LinkedIn', logo: '/M1Q1/LinkedIn_logo_initials.png' },

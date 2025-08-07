@@ -50,6 +50,8 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
     return () => clearTimeout(timer);
   }, []);
 
+
+
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>, optionId: string) => {
     if (options.find(opt => opt.id === optionId)?.dropped) {
         e.preventDefault();
@@ -124,12 +126,12 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-grow w-full max-w-md mx-auto flex flex-col pt-20 px-4 pb-4 overflow-y-auto">
-        <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 flex-grow flex flex-col">
-          <p className="text-center text-gray-800 font-semibold mb-4">
+      <div className="flex-grow flex flex-col items-center justify-center w-full max-w-md mx-auto px-4 sm:px-6">
+        <div className="w-full bg-white rounded-2xl shadow-lg p-6 flex flex-col gap-6 min-h-[400px]">
+          <p className="text-center text-gray-700 text-base sm:text-lg">
             Oh Google ya! Saya pernah dengar sih iklan di Google Search, bentuk iklan-nya yang pasti tampil apa ya? Pilih 2 dari opsi berikut:
           </p>
-          <div className="flex flex-wrap justify-center gap-3 mb-6">
+          <div className="flex flex-wrap items-center justify-center gap-3">
             {options.map((option) => (
               <div
                 key={option.id}

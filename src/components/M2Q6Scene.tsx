@@ -14,13 +14,13 @@ interface M2Q6SceneProps {
 const M2Q6Scene: React.FC<M2Q6SceneProps> = ({ userName, onBack, onNext }) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [showHint, setShowHint] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
+  const [isNotificationVisible, setNotificationVisible] = useState(true);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setIsVisible(true);
-    }, 100);
-    
+      setNotificationVisible(false);
+    }, 3000);
+
     return () => clearTimeout(timer);
   }, []);
 
@@ -41,7 +41,7 @@ const M2Q6Scene: React.FC<M2Q6SceneProps> = ({ userName, onBack, onNext }) => {
   return (
     <div className="h-screen w-full flex flex-col bg-[#FFDE3D] relative overflow-hidden">
       {/* Animated notification bar */}
-      <div className={`${styles.notificationBar} ${isVisible ? styles.slideInM2Q6 : ''} w-full bg-red-600 text-white p-4 fixed top-0 left-0 right-0 z-20`}>
+      <div className={`${styles.notificationBar} ${isNotificationVisible ? styles.slideInM2Q6 : styles.slideOutM2Q6} w-full bg-red-600 text-white p-4 fixed top-0 left-0 right-0 z-20`}>
         <div className="max-w-md mx-auto">
           <div className="flex items-start gap-3">
             <div className="bg-white p-2 rounded-full flex-shrink-0">
@@ -55,7 +55,7 @@ const M2Q6Scene: React.FC<M2Q6SceneProps> = ({ userName, onBack, onNext }) => {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-grow w-full max-w-md mx-auto flex flex-col px-4 pt-24 pb-24 overflow-y-auto">
+      <div className={`flex-grow w-full max-w-md mx-auto flex flex-col px-4 pb-24 overflow-y-auto transition-all duration-500 ${isNotificationVisible ? 'pt-32' : 'pt-8'}`}>
         <div className="w-full">
           <p className="text-gray-800 text-base sm:text-lg mb-4 font-medium text-left">
             Akun Instagram saya saat ini memiliki 1000 followers. Beberapa waktu lalu, tim saya pernah mem-posting 2 konten berikut dan memberikan data-nya ke saya. Konten mana yang memiliki <button onClick={() => setShowHint(true)} className="text-red-600 font-bold underline cursor-pointer">Engagement Rate</button> lebih baik?
@@ -67,7 +67,7 @@ const M2Q6Scene: React.FC<M2Q6SceneProps> = ({ userName, onBack, onNext }) => {
                 key={option.id}
                 onClick={() => handleAnswer(option.id)}
                 className={`p-2 rounded-xl text-left transition-all duration-200 cursor-pointer ${selectedOption === option.id ? 'ring-2 ring-red-500 bg-red-100 shadow-lg' : 'bg-white hover:bg-gray-50 shadow-md'}`}>
-                <div className="relative w-full h-48 mb-2 rounded-md overflow-hidden">
+                <div className="relative w-full aspect-square mb-2 rounded-md overflow-hidden">
                   <Image
                     src={option.imgSrc}
                     alt={`Option ${option.id}`}

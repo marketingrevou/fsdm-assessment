@@ -11,3 +11,7 @@
 .slideIn {
   animation: slideInM1Q3 0.5s ease-in-out forwards;
 }
+
+.dropSlot {
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}

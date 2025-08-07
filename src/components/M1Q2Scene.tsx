@@ -66,13 +66,13 @@ const M1Q2Scene: React.FC<M1Q2SceneProps> = ({ onBack, onNext }) => {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-grow w-full max-w-md mx-auto flex flex-col pt-20 px-4 pb-4 overflow-y-auto">
-        <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-lg flex-grow flex flex-col">
+      <div className="flex-grow w-full flex items-center justify-center p-4 pt-24">
+        <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-lg w-full max-w-md">
           <p className="text-gray-800 text-base sm:text-lg mb-4 text-left font-medium">
             Oke, mengerti. Lalu, gini nih, kalau ada pelanggan yang lagi cari &apos;kopi enak&apos; atau &apos;bunga segar&apos; di internet. Menurut Kamu, cara apa yang paling jitu biar kafe kami langsung mudah ditemukan di internet?
           </p>
 
-          <div className="flex flex-col gap-3 sm:gap-4 mt-auto">
+          <div className="flex flex-col gap-3 sm:gap-4">
             {[
               { id: 'social-media', text: 'Rajin posting foto dan video di Instagram atau Facebook.' },
               { id: 'email', text: 'Kirim info terbaru lewat email ke pelanggan.' },

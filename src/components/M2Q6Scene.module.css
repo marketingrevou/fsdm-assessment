@@ -3,12 +3,21 @@
   to { transform: translateY(0); }
 }
 
+@keyframes slideOutM2Q6 {
+  from { transform: translateY(0); }
+  to { transform: translateY(-100%); }
+}
+
 .notificationBar {
   transform: translateY(-100%);
-  opacity: 1; /* Changed from 0 to 1 to ensure visibility */
+  opacity: 1;
 }
 
 .slideInM2Q6 {
   animation: slideInM2Q6 0.5s ease-out forwards;
-  opacity: 1; /* Ensure full opacity when animated */
+  opacity: 1;
+}
+
+.slideOutM2Q6 {
+    animation: slideOutM2Q6 0.5s ease-out forwards;
 }
