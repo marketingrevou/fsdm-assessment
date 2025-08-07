@@ -34,6 +34,7 @@ const ChatScene: React.FC<ChatSceneProps> = ({ userData, onBack, onNext }) => {
   const [showInvitation, setShowInvitation] = useState(false);
   const [isBotResponding, setIsBotResponding] = useState(false);
   const [showIntroPopup, setShowIntroPopup] = useState(true);
+  const [hasClickedPaperplane, setHasClickedPaperplane] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const nextId = useRef(100); // Start with a high number to avoid collisions
 
@@ -151,6 +152,9 @@ const ChatScene: React.FC<ChatSceneProps> = ({ userData, onBack, onNext }) => {
       // If no current bot message found, re-enable responses
       setIsBotResponding(false);
     }
+
+    // Reset the paperplane animation for the next bot message
+    setHasClickedPaperplane(false);
   };
 
   // Handle proceeding to meeting cover
@@ -179,6 +183,11 @@ const ChatScene: React.FC<ChatSceneProps> = ({ userData, onBack, onNext }) => {
     setTimeout(() => {
       setIsTyping(false);
       setMessages(prev => [...prev, message]);
+      
+      // Reset the paperplane animation for new bot messages
+      if (message.sender === 'bot') {
+        setHasClickedPaperplane(false);
+      }
       
       // If this bot message doesn't require a response and isn't the last message,
       // automatically send the next bot message
@@ -295,7 +304,7 @@ const ChatScene: React.FC<ChatSceneProps> = ({ userData, onBack, onNext }) => {
         const lastBotMessageWithResponses = [...messages].reverse().find(msg => msg.sender === 'bot' && msg.responses);
         const lastBotMessage = [...messages].reverse().find(msg => msg.sender === 'bot');
 
-        if (lastBotMessageWithResponses && lastBotMessage?.id === lastBotMessageWithResponses.id) {
+        if (lastBotMessageWithResponses && (lastBotMessage?.id === lastBotMessageWithResponses.id || isBotResponding)) {
           return (
           <div className={styles.chatInputArea} style={{ position: 'sticky', bottom: 0 }}>
             <div className={styles.responseContainer}>
@@ -314,11 +323,16 @@ const ChatScene: React.FC<ChatSceneProps> = ({ userData, onBack, onNext }) => {
                     >
                       <span className={styles.responseText}>{responseText}</span>
                       <button
-                        onClick={() => !isBotResponding && handleResponse(responseText)}
-                        className={styles.sendButton}
+                        onClick={() => {
+                          if (!isBotResponding) {
+                            setHasClickedPaperplane(true);
+                            handleResponse(responseText);
+                          }
+                        }}
+                        className={`${styles.sendButton} ${!hasClickedPaperplane ? styles.pulseButton : ''}`}
                         disabled={isBotResponding}
                       >
-                        <FaPaperPlane />
+                        <FaPaperPlane style={{ color: 'white' }} />
                       </button>
                     </div>
                   );
