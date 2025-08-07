@@ -72,32 +72,31 @@ const M3Q1Scene: React.FC<M3Q1SceneProps> = ({ onBack, onNext }) => {
       </div>
 
       {/* Main Content Area */}
-            {/* Main Content Area */}
-      <div className="flex-grow flex flex-col items-center justify-center w-full max-w-md mx-auto px-4 pt-12 sm:pt-16 pb-4 overflow-y-auto">
-        <div className="w-full">
-                  {/* Profile Picture */}
-        <div className="mb-4 sm:mb-6">
-          <div className="relative w-24 h-24 sm:w-28 sm:h-28 mx-auto bg-white/20 rounded-full shadow-lg flex items-center justify-center backdrop-blur-sm">
-            <Image
-              src="/Ayu.png"
-              alt="Ayu - Kafe Owner"
-              width={100}
-              height={100}
-              className="rounded-full object-cover"
-              priority
-            />
+      <div className="flex-grow flex flex-col items-center w-full max-w-md mx-auto px-4 py-2 overflow-hidden">
+        <div className="w-full flex-shrink-0">
+          {/* Profile Picture */}
+          <div className="mb-3 sm:mb-4">
+            <div className="relative w-20 h-20 sm:w-24 sm:h-24 mx-auto bg-white/20 rounded-full shadow-lg flex items-center justify-center backdrop-blur-sm">
+              <Image
+                src="/Ayu.png"
+                alt="Ayu - Kafe Owner"
+                width={80}
+                height={80}
+                className="rounded-full object-cover w-full h-full"
+                priority
+              />
+            </div>
           </div>
-        </div>
 
-        {/* Speech Bubbles */}
-        <div className="w-full space-y-3 sm:space-y-4">
+          {/* Speech Bubbles */}
+          <div className="w-full space-y-2 sm:space-y-3 flex-shrink-0">
             {speechBubbles.map((text, index) => (
               <div
                 key={index}
                 className={`bg-white p-3 rounded-xl shadow-md relative transition-all duration-500 ease-out transform ${index < visibleBubblesCount ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}
                 style={{ transitionDelay: `${index * 100}ms` }}
               >
-                <p className="text-gray-800 text-sm leading-normal font-medium">
+                <p className="text-gray-800 text-xs sm:text-sm leading-tight font-medium">
                   {renderTextWithBold(text)}
                 </p>
                 {/* Speech bubble tail */}
@@ -106,24 +105,24 @@ const M3Q1Scene: React.FC<M3Q1SceneProps> = ({ onBack, onNext }) => {
             ))}
           </div>
 
-          {/* Character illustration */}
-          <div className="flex items-end justify-center">
-            <div className="relative w-full max-w-xs mx-auto">
-              <Image
-                src="/GIF/ezgif.com-animated-gif-maker-6.gif"
-                alt="Character speaking"
-                width={200}
-                height={200}
-                className="mx-auto object-contain"
-              />
-            </div>
+        </div>
+        
+        {/* Character illustration */}
+        <div className="flex-grow flex items-center justify-center min-h-0">
+          <div className="relative w-full max-w-[140px] sm:max-w-[160px] mx-auto">
+            <Image
+              src="/GIF/ezgif.com-animated-gif-maker-6.gif"
+              alt="Character speaking"
+              width={140}
+              height={140}
+              className="mx-auto object-contain w-full h-auto"
+            />
           </div>
         </div>
       </div>
 
       {/* Bottom Navigation */}
-            {/* Bottom Navigation */}
-      <div className="w-full max-w-md mx-auto p-4 bg-transparent flex-shrink-0">
+      <div className="w-full max-w-md mx-auto p-3 bg-transparent flex-shrink-0">
                 <div className="flex flex-col items-center w-full">
           <div className="flex flex-row gap-4 w-full">
           <button 

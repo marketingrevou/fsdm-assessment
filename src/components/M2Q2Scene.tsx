@@ -124,8 +124,9 @@ const M2Q2Scene: React.FC<M2Q2SceneProps> = ({ onBack, onNext }) => {
     }
   };
 
-  const buttonBaseClasses = 'rounded-full font-semibold flex items-center justify-center shadow-sm transition-transform duration-100 active:scale-95 aspect-square';
-  const buttonSizeClasses = 'text-xl sm:text-lg lg:text-2xl';
+  // Responsive button sizing - optimized for all screen sizes
+  const buttonBaseClasses = 'rounded-lg font-semibold flex items-center justify-center shadow-sm transition-transform duration-100 active:scale-95 w-14 h-12 sm:w-16 sm:h-14 lg:w-14 lg:h-14 xl:w-14 xl:h-14 2xl:w-14 2xl:h-14 mx-auto';
+  const buttonSizeClasses = 'text-base sm:text-lg lg:text-lg';
 
   return (
     <div className="h-screen w-full flex flex-col bg-[#FFDE3D] relative overflow-hidden">
@@ -161,24 +162,24 @@ const M2Q2Scene: React.FC<M2Q2SceneProps> = ({ onBack, onNext }) => {
       )}
 
       {/* Main Content Area */}
-      <div className="flex-1 w-full overflow-y-auto pb-16 lg:pb-20 flex items-center justify-center">
-        <div className="w-full max-w-7xl mx-auto flex flex-col lg:flex-row lg:gap-4 p-4 lg:px-8 transition-all duration-500 ease-in-out lg:items-center">
+      <div className="flex-1 w-full overflow-y-auto pb-24 sm:pb-16 lg:pb-20 flex items-center justify-center px-4">
+        <div className="w-full max-w-5xl mx-auto flex flex-col lg:flex-row lg:gap-8 p-4 transition-all duration-500 ease-in-out lg:items-start lg:justify-center">
           
           {/* Question Section */}
-          <div className="w-full lg:w-3/5 mb-6 lg:mb-0 flex items-center">
-            <div className="bg-white/50 rounded-xl p-4 lg:p-6 shadow w-full flex items-center justify-center min-h-[200px] lg:min-h-[300px]">
-              <p className="text-base lg:text-lg xl:text-xl text-black text-center w-full leading-relaxed">
+          <div className="w-full lg:w-[45%] lg:max-w-xl mb-6 lg:mb-0 lg:mt-8">
+            <div className="bg-white/50 rounded-xl p-6 shadow w-full h-full flex items-center justify-center min-h-[200px] lg:min-h-[350px]">
+              <p className="text-sm sm:text-base lg:text-lg xl:text-xl text-black text-center w-full leading-relaxed">
                 Oke… Nah ternyata tiap pelanggan itu menghabiskan rata-rata 50 ribu di kafe kami. Kalau dengan budget iklan 750.000 dan 25 pelanggan yang hadir, berapa perkiraan keuntungan yang saya peroleh?
               </p>
             </div>
           </div>
           
           {/* Calculator Section */}
-          <div className="w-full lg:w-2/5">
-            <div className="bg-white rounded-2xl shadow-2xl p-4 lg:p-6">
-              <div className="text-right text-gray-500 text-xs lg:text-sm mb-1 pr-2 h-4 lg:h-4 truncate">{calculationHistory || ' '}</div>
-              <div className="text-right text-black font-light mb-4 lg:mb-6 pr-2 text-6xl sm:text-3xl lg:text-5xl xl:text-7xl overflow-x-auto whitespace-nowrap">{display}</div>
-              <div className="grid grid-cols-4 gap-2 lg:gap-3">
+          <div className="w-full max-w-[300px] mx-auto lg:mx-0 lg:w-[45%] lg:max-w-[320px] lg:flex lg:justify-center">
+            <div className="bg-white rounded-2xl shadow-2xl p-4 w-full flex flex-col">
+              <div className="text-right text-gray-500 text-xs mb-1 pr-2 h-5 truncate">{calculationHistory || ' '}</div>
+              <div className="text-right text-black font-light mb-3 pr-2 text-4xl sm:text-5xl overflow-x-auto whitespace-nowrap">{display}</div>
+              <div className="grid grid-cols-4 gap-1.5 w-full mx-auto">
                 <button className={`${buttonBaseClasses} ${buttonSizeClasses} bg-gray-300 text-black`} onClick={handleClearClick}>C</button>
                 <button className={`${buttonBaseClasses} ${buttonSizeClasses} bg-gray-300 text-black`} onClick={handleToggleSignClick}>+/-</button>
                 <button className={`${buttonBaseClasses} ${buttonSizeClasses} bg-gray-300 text-black`} onClick={handlePercentageClick}>%</button>

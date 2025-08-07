@@ -6,3 +6,7 @@
 .slideInM3Q2 {
   transform: translateY(0);
 }
+
+.slideOutM3Q2 {
+  transform: translateY(-100%);
+}

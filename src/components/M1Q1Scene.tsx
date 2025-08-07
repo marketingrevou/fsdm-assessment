@@ -51,7 +51,7 @@ const M1Q1Scene: React.FC<M1Q1SceneProps> = ({ onBack, onNext }) => {
   };
 
   return (
-    <div className="h-screen w-full flex flex-col bg-[#FFDE3D] relative overflow-hidden">
+        <div className="min-h-screen w-full flex flex-col bg-[#FFDE3D] relative">
       {/* Animated notification bar */}
       <div className={`${styles.notificationBar} ${isVisible ? styles.slideIn : ''} w-full bg-red-600 text-white p-4 fixed top-0 left-0 right-0 z-20`}>
         <div className="max-w-md mx-auto">
@@ -68,7 +68,7 @@ const M1Q1Scene: React.FC<M1Q1SceneProps> = ({ onBack, onNext }) => {
 
       {/* Main Content Area */}
       <div className="flex-grow w-full flex items-center justify-center p-4 pt-24">
-        <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-lg w-full max-w-md">
+        <div className="bg-white rounded-2xl p-4 sm:p-6 w-full max-w-md">
           <p className="text-gray-800 text-base sm:text-lg mb-4 text-center font-medium">
             Kami punya banyak foto dan video produk yang bagus-bagus nih di Kafe Kami.
           </p>
@@ -124,19 +124,19 @@ const M1Q1Scene: React.FC<M1Q1SceneProps> = ({ onBack, onNext }) => {
       </div>
         
       {/* Bottom Navigation */}
-      <div className="w-full max-w-md mx-auto p-4 z-10 bg-[#FFDE3D]">
+            <div className="sticky bottom-0 w-full max-w-md mx-auto p-4 z-10 bg-[#FFDE3D]">
                 <div className="flex flex-col items-center w-full">
           <div className="flex flex-row gap-4 w-full">
           <button
             onClick={onBack}
-            className="h-12 w-12 bg-white hover:bg-gray-100 text-gray-800 font-semibold rounded-lg transition duration-200 flex items-center justify-center flex-none shadow-md"
+            className="h-12 w-12 bg-white hover:bg-gray-100 text-gray-800 font-semibold rounded-lg transition duration-200 flex items-center justify-center flex-none"
           >
             <FaArrowLeft className="w-4 h-4" />
           </button>
           <button
             onClick={handleNext}
             disabled={selectedOption !== 'instagram'}
-            className={`flex-1 h-12 text-white font-semibold rounded-lg transition duration-200 flex items-center justify-center gap-2 shadow-md ${
+            className={`flex-1 h-12 text-white font-semibold rounded-lg transition duration-200 flex items-center justify-center gap-2 ${
               selectedOption === 'instagram'
                 ? 'bg-green-500 hover:bg-green-600'
                 : 'bg-gray-400 cursor-not-allowed'

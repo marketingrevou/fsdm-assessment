@@ -15,8 +15,17 @@ interface M3Q3SceneProps {
 const M3Q3Scene: React.FC<M3Q3SceneProps> = ({ onBack, onNext }) => {
   const [feedback, setFeedback] = useState<string>('');
   const [isPending, startTransition] = useTransition();
-  const isVisible = true;
-  const maxLength = 150;
+  const [isNotificationVisible, setIsNotificationVisible] = useState(true);
+  const maxLength = 250;
+
+  // Auto-hide notification after 5 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsNotificationVisible(false);
+    }, 5000); // Hide after 5 seconds
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleNext = async () => {
     startTransition(async () => {
@@ -29,7 +38,7 @@ const M3Q3Scene: React.FC<M3Q3SceneProps> = ({ onBack, onNext }) => {
   return (
     <div className="h-screen w-full flex flex-col bg-[#FFDE3D] relative overflow-hidden">
       {/* Animated notification bar */}
-      <div className={`${styles.notificationBar} ${isVisible ? styles.slideInM3Q3 : ''} w-full bg-red-600 text-white p-4 fixed top-0 left-0 right-0 z-20`}>
+      <div className={`${styles.notificationBar} ${isNotificationVisible ? styles.slideInM3Q3 : styles.slideOutM3Q3} w-full bg-red-600 text-white p-4 fixed top-0 left-0 right-0 z-20 transition-transform duration-500 ease-in-out`}>
         <div className="max-w-md mx-auto">
           <div className="flex items-start gap-3">
             <div className="bg-white p-2 rounded-full flex-shrink-0">
@@ -43,36 +52,82 @@ const M3Q3Scene: React.FC<M3Q3SceneProps> = ({ onBack, onNext }) => {
       </div>
 
       {/* Main Content Area */}
-            {/* Main Content Area */}
-      <div className="flex-grow flex flex-col items-center justify-center w-full max-w-md mx-auto px-4 pt-24 pb-4 overflow-y-auto">
-        <div className="w-full bg-white rounded-2xl p-4 sm:p-6 shadow-lg text-center">
-          <h1 className="text-2xl sm:text-3xl font-bold mb-2 text-gray-800">Selamat!</h1>
-          
-          <div className="relative w-full h-48 sm:h-64 mb-4">
-            <Image
-              src="/GIF/ezgif.com-animated-gif-maker-14.gif"
-              alt="Celebration Animation"
-              layout="fill"
-              objectFit="contain"
-              priority
-            />
+      <div className={`flex-grow w-full overflow-y-auto transition-all duration-500 ${isNotificationVisible ? 'pt-32' : 'pt-4'} pb-4`}>
+        {/* Mobile Layout - Stacked */}
+        <div className="lg:hidden w-full max-w-md mx-auto px-4">
+          <div className="w-full bg-white rounded-2xl p-4 sm:p-6 shadow-lg text-center">
+            <h1 className="text-2xl sm:text-3xl font-bold mb-2 text-gray-800">Selamat!</h1>
+            
+            <div className="relative w-full aspect-square mb-4 rounded-xl overflow-hidden">
+              <Image
+                src="/GIF/ezgif.com-animated-gif-maker-14.gif"
+                alt="Celebration Animation"
+                layout="fill"
+                objectFit="contain"
+                priority
+              />
+            </div>
+            
+            <p className="text-gray-800 text-base sm:text-lg mb-4 font-medium">
+              Kamu sudah menyelesaikan semua misi kamu hari ini! Tapi sebelum kamu pergi, bolehkah kami tau kenapa kamu tertarik belajar Digital Marketing?
+            </p>
+            
+            <div className="mb-2">
+              <textarea
+                value={feedback}
+                onChange={(e) => setFeedback(e.target.value)}
+                maxLength={maxLength}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent bg-gray-50 transition-shadow"
+                rows={4}
+                placeholder="Tulis jawabanmu di sini (maks. 150 karakter)"
+              />
+              <div className="text-right text-sm text-gray-500 mt-1 pr-1">
+                {feedback.length}/{maxLength}
+              </div>
+            </div>
           </div>
-          
-          <p className="text-gray-800 text-base sm:text-lg mb-4 font-medium">
-            Kamu sudah menyelesaikan semua misi kamu hari ini! Tapi sebelum kamu pergi, bolehkah kami tau kenapa kamu tertarik belajar Digital Marketing?
-          </p>
-          
-          <div className="mb-2">
-            <textarea
-              value={feedback}
-              onChange={(e) => setFeedback(e.target.value)}
-              maxLength={maxLength}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent bg-gray-50 transition-shadow"
-              rows={4}
-              placeholder="Tulis jawabanmu di sini (maks. 150 karakter)"
-            />
-            <div className="text-right text-sm text-gray-500 mt-1 pr-1">
-              {feedback.length}/{maxLength}
+        </div>
+
+        {/* Desktop Layout - Side by Side */}
+        <div className="hidden lg:flex lg:items-center lg:justify-center w-full px-4 xl:px-6 h-full">
+          <div className="max-w-5xl mx-auto w-full">
+            <div className="grid lg:grid-cols-2 lg:gap-4 xl:gap-6 lg:items-center h-full">
+              {/* Selamat + Image Section - Left */}
+              <div className="flex flex-col items-center justify-center text-center">
+                <h1 className="text-2xl xl:text-3xl font-bold mb-4 text-gray-800">Selamat!</h1>
+                
+                <div className="relative w-full max-w-xs xl:max-w-sm aspect-square rounded-xl overflow-hidden">
+                  <Image
+                    src="/GIF/ezgif.com-animated-gif-maker-14.gif"
+                    alt="Celebration Animation"
+                    layout="fill"
+                    objectFit="contain"
+                    priority
+                  />
+                </div>
+              </div>
+              
+              {/* Question + Textbox Section - Right */}
+              <div className="flex items-center justify-center">
+                <div className="bg-white rounded-2xl p-5 xl:p-6 shadow-lg w-full max-w-md">
+                  <p className="text-base xl:text-lg text-black text-center leading-relaxed font-medium mb-6">
+                    Kamu sudah menyelesaikan semua misi kamu hari ini! Tapi sebelum kamu pergi, bolehkah kami tau kenapa kamu tertarik belajar Digital Marketing?
+                  </p>
+                  
+                  <div className="space-y-2">
+                    <textarea
+                      value={feedback}
+                      onChange={(e) => setFeedback(e.target.value)}
+                      maxLength={maxLength}
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent bg-gray-50 transition-shadow text-sm xl:text-base h-24 xl:h-28 resize-none"
+                      placeholder="Tulis jawabanmu di sini (maks. 250 karakter)"
+                    />
+                    <div className="text-right text-xs xl:text-sm text-gray-500 pr-1">
+                      {feedback.length}/{maxLength}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

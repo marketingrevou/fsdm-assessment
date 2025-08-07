@@ -33,7 +33,7 @@ const M2Q7Scene: React.FC<M2Q7SceneProps> = ({ onBack, onNext }) => {
   ];
 
   return (
-    <div className="h-screen w-full flex flex-col bg-[#FFDE3D] relative overflow-hidden">
+    <div className="min-h-screen w-full flex flex-col bg-[#FFDE3D] relative overflow-y-auto">
       {/* Animated notification bar */}
       <div className="w-full bg-red-600 text-white p-4 fixed top-0 left-0 right-0 z-20">
         <div className="max-w-md mx-auto">
@@ -50,7 +50,7 @@ const M2Q7Scene: React.FC<M2Q7SceneProps> = ({ onBack, onNext }) => {
 
       {/* Main Content Area */}
             {/* Main Content Area */}
-      <div className="flex-grow w-full max-w-md mx-auto flex flex-col justify-center px-4 pt-24 pb-24 overflow-y-auto">
+      <div className="flex-grow w-full max-w-md mx-auto flex flex-col justify-start px-4 pt-32 pb-24 overflow-y-auto">
         <div className="w-full">
           <p className="text-gray-800 text-base sm:text-lg mb-4 font-medium text-left">
             Oh begitu ya, nah ini ada beberapa ide lagi dari tim kami. Berdasarkan data sebelumnya, Foto mana yang kamu sarankan untuk selanjutnya kami posting?

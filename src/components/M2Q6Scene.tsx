@@ -40,7 +40,7 @@ const M2Q6Scene: React.FC<M2Q6SceneProps> = ({ userName, onBack, onNext }) => {
   ];
 
   return (
-    <div className="h-screen w-full flex flex-col bg-[#FFDE3D] relative overflow-hidden">
+    <div className="min-h-screen w-full flex flex-col bg-[#FFDE3D] relative">
       {/* Animated notification bar */}
       <div className={`${styles.notificationBar} ${isNotificationVisible ? styles.slideInM2Q6 : styles.slideOutM2Q6} w-full bg-red-600 text-white p-4 fixed top-0 left-0 right-0 z-20`}>
         <div className="max-w-md mx-auto">
@@ -56,10 +56,9 @@ const M2Q6Scene: React.FC<M2Q6SceneProps> = ({ userName, onBack, onNext }) => {
       </div>
 
       {/* Main Content Area */}
-            {/* Main Content Area */}
-      <div className={`flex-grow w-full max-w-md mx-auto flex flex-col justify-center px-4 pb-24 overflow-y-auto transition-all duration-500 ${isNotificationVisible ? 'pt-32' : 'pt-8'}`}>
+      <div className={`flex-grow w-full max-w-md mx-auto flex flex-col px-6 pb-24 transition-all duration-500 ${isNotificationVisible ? 'pt-36' : 'pt-12'}`}>
         <div className="w-full">
-          <p className="text-gray-800 text-base sm:text-lg mb-4 font-medium text-left">
+          <p className="text-gray-800 text-base sm:text-lg mb-4 font-medium text-left break-words">
             Akun Instagram saya saat ini memiliki 1000 followers. Beberapa waktu lalu, tim saya pernah mem-posting 2 konten berikut dan memberikan data-nya ke saya. Konten mana yang memiliki <button onClick={() => setShowHint(true)} className="text-red-600 font-bold underline cursor-pointer">Engagement Rate</button> lebih baik?
           </p>
           

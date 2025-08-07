@@ -119,7 +119,7 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
   };
 
   return (
-    <div className="h-screen w-full flex flex-col bg-[#FFDE3D] relative overflow-hidden">
+    <div className="min-h-screen w-full flex flex-col bg-[#FFDE3D] relative">
       <div className={`${styles.notificationBar} ${isVisible ? styles.slideIn : ''} w-full bg-red-600 text-white p-4 fixed top-0 left-0 right-0 z-20`}>
         <div className="max-w-md mx-auto">
           <div className="flex items-start gap-3">
@@ -134,8 +134,8 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-grow flex flex-col items-center justify-center w-full max-w-md mx-auto px-4 sm:px-6">
-        <div className="w-full bg-white rounded-2xl shadow-lg p-6 flex flex-col gap-6 min-h-[400px]">
+                  <div className="flex-grow w-full p-4 md:px-32 pt-24 flex items-start md:items-center justify-center">
+                  <div className="w-full bg-white rounded-2xl p-6 flex flex-col gap-6 justify-between">
           <p className="text-center text-gray-700 text-base sm:text-lg">
             Oh Google ya! Saya pernah dengar sih iklan di Google Search, bentuk iklan-nya yang pasti tampil apa ya? Pilih 2 dari opsi berikut:
           </p>
@@ -156,7 +156,7 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
             ))}
           </div>
 
-          <div className="flex items-center justify-center w-full space-x-4 my-auto">
+                    <div className="flex items-center justify-center w-full space-x-4">
             {dropSlots.map((slot, index) => (
               <React.Fragment key={slot.id}>
                 <div
@@ -178,18 +178,18 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
       </div>
 
       {/* Bottom Navigation */}
-      <div className="w-full max-w-md mx-auto p-4 z-10 bg-[#FFDE3D] flex-shrink-0">
+      <div className="sticky bottom-0 w-full max-w-md mx-auto p-4 z-10 bg-[#FFDE3D] flex-shrink-0">
                 <div className="flex flex-col items-center w-full">
           <div className="flex flex-row gap-4 w-full">
           <button 
             onClick={onBack}
-            className="h-12 w-12 bg-white hover:bg-gray-100 text-gray-800 font-semibold rounded-lg transition duration-200 flex items-center justify-center flex-none shadow-md">
+            className="h-12 w-12 bg-white hover:bg-gray-100 text-gray-800 font-semibold rounded-lg transition duration-200 flex items-center justify-center flex-none">
             <FaArrowLeft className="w-4 h-4" />
           </button>
           <button 
             onClick={onNext}
             disabled={!isCorrect}
-            className={`flex-1 h-12 text-white font-semibold rounded-lg transition duration-200 flex items-center justify-center gap-2 shadow-md ${isCorrect ? 'bg-green-500 hover:bg-green-600' : 'bg-gray-400 cursor-not-allowed'}`}>
+            className={`flex-1 h-12 text-white font-semibold rounded-lg transition duration-200 flex items-center justify-center gap-2 ${isCorrect ? 'bg-green-500 hover:bg-green-600' : 'bg-gray-400 cursor-not-allowed'}`}>
             Selanjutnya
             <FaArrowRight className="w-4 h-4" />
           </button>

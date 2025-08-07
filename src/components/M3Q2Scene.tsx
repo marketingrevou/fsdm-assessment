@@ -14,8 +14,17 @@ interface M3Q2SceneProps {
 const M3Q2Scene: React.FC<M3Q2SceneProps> = ({ onBack, onNext }) => {
   const [feedback, setFeedback] = useState<string>('');
   const [isPending, startTransition] = useTransition();
-  const isVisible = true;
+  const [isNotificationVisible, setIsNotificationVisible] = useState(true);
   const maxLength = 150;
+
+  // Auto-hide notification after 5 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsNotificationVisible(false);
+    }, 5000); // Hide after 5 seconds
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleNext = async () => {
     startTransition(async () => {
@@ -27,7 +36,7 @@ const M3Q2Scene: React.FC<M3Q2SceneProps> = ({ onBack, onNext }) => {
   return (
     <div className="h-screen w-full flex flex-col bg-[#FFDE3D] relative overflow-hidden">
       {/* Animated notification bar */}
-      <div className={`${styles.notificationBar} ${isVisible ? styles.slideInM3Q2 : ''} w-full bg-red-600 text-white p-4 fixed top-0 left-0 right-0 z-20`}>
+      <div className={`${styles.notificationBar} ${isNotificationVisible ? styles.slideInM3Q2 : styles.slideOutM3Q2} w-full bg-red-600 text-white p-4 fixed top-0 left-0 right-0 z-20 transition-transform duration-500 ease-in-out`}>
         <div className="max-w-md mx-auto">
           <div className="flex items-start gap-3">
             <div className="bg-white p-2 rounded-full flex-shrink-0">
@@ -41,34 +50,74 @@ const M3Q2Scene: React.FC<M3Q2SceneProps> = ({ onBack, onNext }) => {
       </div>
 
       {/* Main Content Area */}
-            {/* Main Content Area */}
-      <div className="flex-grow flex flex-col items-center justify-center w-full max-w-md mx-auto px-4 pt-24 pb-4 overflow-y-auto">
-        <div className="w-full bg-white rounded-2xl p-4 sm:p-6 shadow-lg">
-          <div className="relative w-full h-64 sm:h-80 mb-4 rounded-xl overflow-hidden bg-gray-100">
-            <Image
-              src="/Poster1.png"
-              alt="Poster Design"
-              layout="fill"
-              objectFit="contain"
-              priority
-            />
+      <div className={`flex-grow flex items-center justify-center w-full px-4 py-2 overflow-hidden transition-all duration-500 ${isNotificationVisible ? 'pt-32' : 'pt-4'}`}>
+        <div className="w-full max-w-md lg:max-w-5xl mx-auto">
+          {/* Mobile Layout - Stacked */}
+          <div className="lg:hidden w-full bg-white rounded-2xl p-4 sm:p-6 shadow-lg">
+            <div className="relative w-full aspect-square mb-4 rounded-xl overflow-hidden bg-gray-100">
+              <Image
+                src="/Poster1.png"
+                alt="Poster Design"
+                layout="fill"
+                objectFit="contain"
+                priority
+              />
+            </div>
+            
+            <p className="text-gray-800 text-base sm:text-lg mb-4 font-medium">
+              Tim kami sudah membuat poster-nya nih, apakah kamu punya saran tentang poster kami?
+            </p>
+            
+            <div className="mb-2">
+              <textarea
+                value={feedback}
+                onChange={(e) => setFeedback(e.target.value)}
+                maxLength={maxLength}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent bg-gray-50 transition-shadow"
+                rows={4}
+                placeholder="Tulis saranmu di sini (maks. 150 karakter)"
+              />
+              <div className="text-right text-sm text-gray-500 mt-1 pr-1">
+                {feedback.length}/{maxLength}
+              </div>
+            </div>
           </div>
-          
-          <p className="text-gray-800 text-base sm:text-lg mb-4 font-medium">
-            Tim kami sudah membuat poster-nya nih, apakah kamu punya saran tentang poster kami?
-          </p>
-          
-          <div className="mb-2">
-            <textarea
-              value={feedback}
-              onChange={(e) => setFeedback(e.target.value)}
-              maxLength={maxLength}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent bg-gray-50 transition-shadow"
-              rows={4}
-              placeholder="Tulis saranmu di sini (maks. 150 karakter)"
-            />
-            <div className="text-right text-sm text-gray-500 mt-1 pr-1">
-              {feedback.length}/{maxLength}
+
+          {/* Desktop Layout - Side by Side */}
+          <div className="hidden lg:flex lg:gap-8 lg:items-center lg:justify-center">
+            {/* Image Section - Left */}
+            <div className="lg:w-[45%] lg:max-w-xl">
+              <div className="relative w-full aspect-square rounded-xl overflow-hidden shadow-lg">
+                <Image
+                  src="/Poster1.png"
+                  alt="Poster Design"
+                  layout="fill"
+                  objectFit="contain"
+                  priority
+                />
+              </div>
+            </div>
+            
+            {/* Question + Textbox Section - Right */}
+            <div className="lg:w-[45%] lg:max-w-xl">
+              <div className="bg-white rounded-2xl p-6 shadow-lg h-full flex flex-col justify-center">
+                <p className="text-lg xl:text-xl text-black text-center leading-relaxed font-medium mb-8">
+                  Tim kami sudah membuat poster-nya nih, apakah kamu punya saran tentang poster kami?
+                </p>
+                
+                <div className="flex-1 flex flex-col">
+                  <textarea
+                    value={feedback}
+                    onChange={(e) => setFeedback(e.target.value)}
+                    maxLength={maxLength}
+                    className="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent bg-gray-50 transition-shadow text-base flex-1 min-h-[120px] resize-none"
+                    placeholder="Tulis saranmu di sini (maks. 150 karakter)"
+                  />
+                  <div className="text-right text-sm text-gray-500 mt-2 pr-1">
+                    {feedback.length}/{maxLength}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
