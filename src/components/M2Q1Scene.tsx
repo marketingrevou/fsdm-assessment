@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import styles from './M2Q1Scene.module.css';
+import ProgressBar from './ProgressBar';
 
 import { correctAnswers } from '@/lib/answers';
 
@@ -210,7 +211,7 @@ const M2Q1Scene: React.FC<M2Q1SceneProps> = ({ userName, onBack, onNext }) => {
 
       {/* Bottom Navigation */}
       <div className="w-full max-w-md lg:max-w-7xl mx-auto p-3 lg:p-4 z-10 bg-[#FFDE3D] fixed bottom-0 left-0 right-0">
-        <div className="flex flex-row justify-center w-full">
+        <div className="flex flex-col items-center w-full">
           <button 
             onClick={() => {
               // Normalize the display value by removing trailing zeros and decimal points
@@ -218,10 +219,13 @@ const M2Q1Scene: React.FC<M2Q1SceneProps> = ({ userName, onBack, onNext }) => {
               const score = (normalizedDisplay === correctAnswers.M2Q1) ? 1 : 0;
               onNext(score);
             }}
-            className='flex-1 lg:max-w-md h-10 lg:h-12 text-white font-semibold rounded-lg transition duration-200 flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 shadow-md'>
+            className='w-full lg:max-w-md h-10 lg:h-12 text-white font-semibold rounded-lg transition duration-200 flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 shadow-md'>
             Kirim Jawaban
             <FaArrowRight className="w-4 h-4" />
           </button>
+          <div className="w-full lg:max-w-md mt-2">
+            <ProgressBar current={1} total={7} />
+          </div>
         </div>
       </div>
     </div>

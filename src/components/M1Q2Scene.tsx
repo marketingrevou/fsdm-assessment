@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import styles from './M1Q2Scene.module.css';
 import QuizResultPopup from './QuizResultPopup';
+import ProgressBar from './ProgressBar';
 
 interface M1Q2SceneProps {
   onBack: () => void;
@@ -102,7 +103,8 @@ const M1Q2Scene: React.FC<M1Q2SceneProps> = ({ onBack, onNext }) => {
         
       {/* Bottom Navigation */}
       <div className="w-full max-w-md mx-auto p-4 z-10 bg-[#FFDE3D]">
-        <div className="flex flex-row gap-4 w-full">
+                <div className="flex flex-col items-center w-full">
+          <div className="flex flex-row gap-4 w-full">
           <button 
             onClick={onBack}
             className="h-12 w-12 bg-white hover:bg-gray-100 text-gray-800 font-semibold rounded-lg transition duration-200 flex items-center justify-center flex-none shadow-md"
@@ -121,6 +123,10 @@ const M1Q2Scene: React.FC<M1Q2SceneProps> = ({ onBack, onNext }) => {
             Selanjutnya
             <FaArrowRight className="w-4 h-4" />
           </button>
+          </div>
+          <div className="w-full lg:max-w-md mt-2">
+            <ProgressBar current={2} total={3} />
+          </div>
         </div>
       </div>
 

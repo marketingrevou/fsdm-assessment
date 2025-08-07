@@ -4,6 +4,7 @@ import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import Image from 'next/image';
 import styles from './M1Q3Scene.module.css';
 import QuizResultPopup from './QuizResultPopup';
+import ProgressBar from './ProgressBar';
 
 // Define types for our state
 interface Option {
@@ -169,7 +170,8 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
 
       {/* Bottom Navigation */}
       <div className="w-full max-w-md mx-auto p-4 z-10 bg-[#FFDE3D] flex-shrink-0">
-        <div className="flex flex-row gap-4 w-full">
+                <div className="flex flex-col items-center w-full">
+          <div className="flex flex-row gap-4 w-full">
           <button 
             onClick={onBack}
             className="h-12 w-12 bg-white hover:bg-gray-100 text-gray-800 font-semibold rounded-lg transition duration-200 flex items-center justify-center flex-none shadow-md">
@@ -182,6 +184,10 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
             Selanjutnya
             <FaArrowRight className="w-4 h-4" />
           </button>
+          </div>
+          <div className="w-full lg:max-w-md mt-2">
+            <ProgressBar current={3} total={3} />
+          </div>
         </div>
       </div>
 

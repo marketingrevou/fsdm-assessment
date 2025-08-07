@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
+import ProgressBar from './ProgressBar';
 
 interface M3Q1SceneProps {
   userName: string;
@@ -71,10 +72,25 @@ const M3Q1Scene: React.FC<M3Q1SceneProps> = ({ onBack, onNext }) => {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-grow w-full max-w-md mx-auto px-4 flex flex-col justify-end overflow-hidden pb-4">
+            {/* Main Content Area */}
+      <div className="flex-grow flex flex-col items-center justify-center w-full max-w-md mx-auto px-4 pt-12 sm:pt-16 pb-4 overflow-y-auto">
         <div className="w-full">
-          {/* Speech bubbles container */}
-          <div className="w-full space-y-4 mb-4">
+                  {/* Profile Picture */}
+        <div className="mb-4 sm:mb-6">
+          <div className="relative w-24 h-24 sm:w-28 sm:h-28 mx-auto bg-white/20 rounded-full shadow-lg flex items-center justify-center backdrop-blur-sm">
+            <Image
+              src="/Ayu.png"
+              alt="Ayu - Kafe Owner"
+              width={100}
+              height={100}
+              className="rounded-full object-cover"
+              priority
+            />
+          </div>
+        </div>
+
+        {/* Speech Bubbles */}
+        <div className="w-full space-y-3 sm:space-y-4">
             {speechBubbles.map((text, index) => (
               <div
                 key={index}
@@ -106,8 +122,10 @@ const M3Q1Scene: React.FC<M3Q1SceneProps> = ({ onBack, onNext }) => {
       </div>
 
       {/* Bottom Navigation */}
-      <div className="w-full max-w-md mx-auto p-4 bg-white border-t border-gray-200 flex-shrink-0">
-        <div className="flex flex-row gap-4 w-full">
+            {/* Bottom Navigation */}
+      <div className="w-full max-w-md mx-auto p-4 bg-transparent flex-shrink-0">
+                <div className="flex flex-col items-center w-full">
+          <div className="flex flex-row gap-4 w-full">
           <button 
             onClick={handleBack}
             className="h-12 w-12 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold rounded-lg transition duration-200 flex items-center justify-center flex-none shadow-sm"
@@ -123,6 +141,10 @@ const M3Q1Scene: React.FC<M3Q1SceneProps> = ({ onBack, onNext }) => {
             {visibleBubblesCount < speechBubbles.length ? 'Mengetik...' : 'Lanjut'}
             {visibleBubblesCount >= speechBubbles.length && <FaArrowRight className="w-4 h-4" />}
           </button>
+          </div>
+          <div className="w-full lg:max-w-md mt-2">
+            <ProgressBar current={1} total={3} />
+          </div>
         </div>
       </div>
     </div>

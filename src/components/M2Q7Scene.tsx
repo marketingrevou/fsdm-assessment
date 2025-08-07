@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
+import ProgressBar from './ProgressBar';
 
 
 import { correctAnswers } from '@/lib/answers';
@@ -48,7 +49,8 @@ const M2Q7Scene: React.FC<M2Q7SceneProps> = ({ onBack, onNext }) => {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-grow w-full max-w-md mx-auto flex flex-col px-4 pt-24 pb-24 overflow-y-auto">
+            {/* Main Content Area */}
+      <div className="flex-grow w-full max-w-md mx-auto flex flex-col justify-center px-4 pt-24 pb-24 overflow-y-auto">
         <div className="w-full">
           <p className="text-gray-800 text-base sm:text-lg mb-4 font-medium text-left">
             Oh begitu ya, nah ini ada beberapa ide lagi dari tim kami. Berdasarkan data sebelumnya, Foto mana yang kamu sarankan untuk selanjutnya kami posting?
@@ -76,14 +78,17 @@ const M2Q7Scene: React.FC<M2Q7SceneProps> = ({ onBack, onNext }) => {
 
       {/* Bottom Navigation */}
       <div className="w-full max-w-md mx-auto p-4 z-10 bg-[#FFDE3D] fixed bottom-0 left-0 right-0">
-        <div className="flex flex-row justify-center w-full">
+        <div className="flex flex-col items-center w-full">
           <button 
             onClick={handleNext}
             disabled={!selectedOption}
-            className={`flex-1 h-12 text-white font-semibold rounded-lg transition duration-200 flex items-center justify-center gap-2 shadow-md ${selectedOption ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-400 cursor-not-allowed'}`}>
+            className={`w-full h-12 text-white font-semibold rounded-lg transition duration-200 flex items-center justify-center gap-2 shadow-md ${selectedOption ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-400 cursor-not-allowed'}`}>
             Selanjutnya
             <FaArrowRight className="w-4 h-4" />
           </button>
+          <div className="w-full lg:max-w-md mt-2">
+            <ProgressBar current={7} total={7} />
+          </div>
         </div>
       </div>
     </div>

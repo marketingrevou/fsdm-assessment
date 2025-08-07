@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { FaArrowLeft, FaArrowRight, FaHeart, FaComment } from 'react-icons/fa';
 import styles from './M2Q6Scene.module.css';
+import ProgressBar from './ProgressBar';
 
 import { correctAnswers } from '@/lib/answers';
 
@@ -55,7 +56,8 @@ const M2Q6Scene: React.FC<M2Q6SceneProps> = ({ userName, onBack, onNext }) => {
       </div>
 
       {/* Main Content Area */}
-      <div className={`flex-grow w-full max-w-md mx-auto flex flex-col px-4 pb-24 overflow-y-auto transition-all duration-500 ${isNotificationVisible ? 'pt-32' : 'pt-8'}`}>
+            {/* Main Content Area */}
+      <div className={`flex-grow w-full max-w-md mx-auto flex flex-col justify-center px-4 pb-24 overflow-y-auto transition-all duration-500 ${isNotificationVisible ? 'pt-32' : 'pt-8'}`}>
         <div className="w-full">
           <p className="text-gray-800 text-base sm:text-lg mb-4 font-medium text-left">
             Akun Instagram saya saat ini memiliki 1000 followers. Beberapa waktu lalu, tim saya pernah mem-posting 2 konten berikut dan memberikan data-nya ke saya. Konten mana yang memiliki <button onClick={() => setShowHint(true)} className="text-red-600 font-bold underline cursor-pointer">Engagement Rate</button> lebih baik?
@@ -107,14 +109,17 @@ const M2Q6Scene: React.FC<M2Q6SceneProps> = ({ userName, onBack, onNext }) => {
 
       {/* Bottom Navigation */}
       <div className="w-full max-w-md mx-auto p-4 z-10 bg-[#FFDE3D] fixed bottom-0 left-0 right-0">
-        <div className="flex flex-row justify-center w-full">
+        <div className="flex flex-col items-center w-full">
           <button 
             onClick={handleNext}
             disabled={!selectedOption}
-            className={`flex-1 h-12 text-white font-semibold rounded-lg transition duration-200 flex items-center justify-center gap-2 shadow-md ${selectedOption ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-400 cursor-not-allowed'}`}>
+            className={`w-full h-12 text-white font-semibold rounded-lg transition duration-200 flex items-center justify-center gap-2 shadow-md ${selectedOption ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-400 cursor-not-allowed'}`}>
             Selanjutnya
             <FaArrowRight className="w-4 h-4" />
           </button>
+          <div className="w-full lg:max-w-md mt-2">
+            <ProgressBar current={6} total={7} />
+          </div>
         </div>
       </div>
     </div>

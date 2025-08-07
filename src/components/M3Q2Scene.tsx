@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import styles from './M3Q2Scene.module.css';
 import { saveM3Q2Feedback } from '@/app/actions/scoreActions';
+import ProgressBar from './ProgressBar';
 
 interface M3Q2SceneProps {
   userName: string;
@@ -40,7 +41,8 @@ const M3Q2Scene: React.FC<M3Q2SceneProps> = ({ onBack, onNext }) => {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-grow flex flex-col items-center w-full max-w-md mx-auto px-4 pt-24 pb-4 overflow-y-auto">
+            {/* Main Content Area */}
+      <div className="flex-grow flex flex-col items-center justify-center w-full max-w-md mx-auto px-4 pt-24 pb-4 overflow-y-auto">
         <div className="w-full bg-white rounded-2xl p-4 sm:p-6 shadow-lg">
           <div className="relative w-full h-64 sm:h-80 mb-4 rounded-xl overflow-hidden bg-gray-100">
             <Image
@@ -74,7 +76,8 @@ const M3Q2Scene: React.FC<M3Q2SceneProps> = ({ onBack, onNext }) => {
 
       {/* Bottom Navigation */}
       <div className="w-full max-w-md mx-auto p-4 z-10 bg-[#FFDE3D]">
-        <div className="flex flex-row gap-4 w-full">
+                <div className="flex flex-col items-center w-full">
+          <div className="flex flex-row gap-4 w-full">
           <button 
             onClick={onBack}
             className="h-12 w-12 bg-white hover:bg-gray-100 text-gray-800 font-semibold rounded-lg transition duration-200 flex items-center justify-center flex-none shadow-md"
@@ -88,6 +91,10 @@ const M3Q2Scene: React.FC<M3Q2SceneProps> = ({ onBack, onNext }) => {
             Selanjutnya
             <FaArrowRight className="w-4 h-4" />
           </button>
+          </div>
+          <div className="w-full lg:max-w-md mt-2">
+            <ProgressBar current={2} total={3} />
+          </div>
         </div>
       </div>
     </div>
