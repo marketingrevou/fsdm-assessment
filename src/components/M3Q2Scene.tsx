@@ -49,8 +49,11 @@ const M3Q2Scene: React.FC<M3Q2SceneProps> = ({ onBack, onNext }) => {
         </div>
       </div>
 
+      {/* Spacer for notification bar */}
+      <div className={`transition-all duration-500 flex-shrink-0 ${isNotificationVisible ? 'h-20' : 'h-0'}`}></div>
+
       {/* Main Content Area */}
-      <div className={`flex-grow flex items-center justify-center w-full px-4 py-2 overflow-hidden transition-all duration-500 ${isNotificationVisible ? 'pt-32' : 'pt-4'}`}>
+      <div className="flex-grow flex items-center justify-center w-full px-4 py-4 overflow-hidden">
         <div className="w-full max-w-md lg:max-w-5xl mx-auto">
           {/* Mobile Layout - Stacked */}
           <div className="lg:hidden w-full bg-white rounded-2xl p-4 sm:p-6 shadow-lg">

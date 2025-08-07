@@ -59,23 +59,12 @@ const M3Q1Scene: React.FC<M3Q1SceneProps> = ({ onBack, onNext }) => {
 
   return (
     <div className="h-screen w-full flex flex-col bg-[#FFDE3D]">
-      {/* Header */}
-      <div className="w-full p-4 flex justify-center sm:justify-start flex-shrink-0">
-        <div className="w-12 h-12 sm:w-16 sm:h-16 relative">
-          <Image 
-            src="/logorevou.png" 
-            alt="RevoU Logo" 
-            fill
-            className="object-contain"
-          />
-        </div>
-      </div>
-
-      {/* Main Content Area */}
-      <div className="flex-grow flex flex-col items-center w-full max-w-md mx-auto px-4 py-2 overflow-hidden">
-        <div className="w-full flex-shrink-0">
+      {/* Main Content Area - Vertically Centered */}
+      <div className="flex-grow flex flex-col items-center justify-center w-full max-w-md mx-auto px-4 py-4">
+        {/* Content Container */}
+        <div className="flex flex-col items-center w-full space-y-4">
           {/* Profile Picture */}
-          <div className="mb-3 sm:mb-4">
+          <div className="flex-shrink-0">
             <div className="relative w-20 h-20 sm:w-24 sm:h-24 mx-auto bg-white/20 rounded-full shadow-lg flex items-center justify-center backdrop-blur-sm">
               <Image
                 src="/Ayu.png"
@@ -104,19 +93,18 @@ const M3Q1Scene: React.FC<M3Q1SceneProps> = ({ onBack, onNext }) => {
               </div>
             ))}
           </div>
-
-        </div>
         
-        {/* Character illustration */}
-        <div className="flex-grow flex items-center justify-center min-h-0">
-          <div className="relative w-full max-w-[140px] sm:max-w-[160px] mx-auto">
-            <Image
-              src="/GIF/ezgif.com-animated-gif-maker-6.gif"
-              alt="Character speaking"
-              width={140}
-              height={140}
-              className="mx-auto object-contain w-full h-auto"
-            />
+          {/* Character illustration */}
+          <div className="flex items-center justify-center flex-shrink-0 pt-2">
+            <div className="relative w-full max-w-[120px] sm:max-w-[140px] lg:max-w-[160px] mx-auto">
+              <Image
+                src="/GIF/ezgif.com-animated-gif-maker-6.gif"
+                alt="Character speaking"
+                width={140}
+                height={140}
+                className="mx-auto object-contain w-full h-auto"
+              />
+            </div>
           </div>
         </div>
       </div>

@@ -37,13 +37,13 @@ const M2Q4Scene: React.FC<M2Q4SceneProps> = ({ userName, onBack, onNext }) => {
   return (
     <div className="h-screen w-full flex flex-col bg-[#FFDE3D] relative overflow-hidden">
       {/* Animated notification bar */}
-      <div className={`${styles.notificationBar} ${isVisible ? styles.slideInM2Q4 : ''} w-full bg-red-600 text-white p-4 fixed top-0 left-0 right-0 z-20`}>
-        <div className="max-w-md mx-auto">
+      <div className={`${styles.notificationBar} ${isVisible ? styles.slideInM2Q4 : ''} w-full bg-red-600 text-white p-3 lg:p-2 fixed top-0 left-0 right-0 z-20`}>
+        <div className="max-w-md lg:max-w-6xl mx-auto">
           <div className="flex items-start gap-3">
-            <div className="bg-white p-2 rounded-full flex-shrink-0">
-              <span className="text-xl sm:text-2xl">😉</span>
+            <div className="bg-white p-1.5 lg:p-1 rounded-full flex-shrink-0">
+              <span className="text-lg lg:text-xl">😉</span>
             </div>
-            <p className="text-base font-medium flex-1 text-left">
+            <p className="text-sm lg:text-xs font-medium flex-1 text-left">
               Masih semangat kan? Jangan takut salah, kamu pasti bisa!
             </p>
           </div>
@@ -51,9 +51,9 @@ const M2Q4Scene: React.FC<M2Q4SceneProps> = ({ userName, onBack, onNext }) => {
       </div>
 
       {/* Main Content Area */}
-            {/* Main Content Area */}
-      <div className="flex-grow w-full max-w-md mx-auto flex flex-col justify-center px-4 pt-24 pb-24 overflow-y-auto">
-        <div className="w-full">
+      <div className="flex-1 w-full flex items-center justify-center p-4 pt-20 lg:pt-16 pb-32 lg:pb-24">
+        {/* Mobile Layout - Single Column */}
+        <div className="lg:hidden w-full max-w-md mx-auto flex flex-col overflow-y-auto">
           <div className="relative w-full h-48 sm:h-64 mb-4 rounded-xl overflow-hidden shadow-lg">
             <Image
               src="/table2.png"
@@ -85,20 +85,70 @@ const M2Q4Scene: React.FC<M2Q4SceneProps> = ({ userName, onBack, onNext }) => {
             ))}
           </div>
         </div>
+
+        {/* Desktop Layout - Side by Side */}
+        <div className="hidden lg:flex w-full max-w-6xl gap-6 h-full max-h-[calc(100vh-8rem)]">
+          {/* Left Side - Image */}
+          <div className="w-1/2 flex flex-col justify-center">
+            <div className="relative w-full h-full max-h-96 rounded-xl overflow-hidden bg-ffde3d bg-opacity-20">
+              <Image
+                src="/table2.png"
+                alt="Email Open Rate Data Table"
+                layout="fill"
+                objectFit="contain"
+                priority
+              />
+            </div>
+          </div>
+
+          {/* Right Side - Question and Options */}
+          <div className="w-1/2 flex flex-col justify-center">
+            <p className="text-black text-base xl:text-lg mb-6 font-medium leading-relaxed">
+              Saya juga punya data ini. Menurut kamu, kapan waktu paling tepat untuk mengirim email promosi?
+            </p>
+            
+            <div className="grid grid-cols-1 gap-4">
+              {[
+                { id: 'time-1', text: '09:00 - 11:00' },
+                { id: 'time-2', text: '11:30 - 13:30' },
+                { id: 'time-3', text: '16:00 - 19.00' },
+              ].map((option) => (
+                <button
+                  key={option.id}
+                  onClick={() => handleAnswer(option.id)}
+                  className={`p-4 rounded-xl text-center transition-all duration-200 w-full transform hover:scale-105 ${
+                    selectedOption === option.id 
+                      ? 'ring-2 ring-red-500 bg-red-100 bg-opacity-80 shadow-md' 
+                      : 'bg-white bg-opacity-60 hover:bg-opacity-80 shadow-sm'
+                  }`}
+                >
+                  <span className="text-base font-medium text-gray-800">
+                    {option.text}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Bottom Navigation */}
-      <div className="w-full max-w-md mx-auto p-4 z-10 bg-[#FFDE3D] fixed bottom-0 left-0 right-0">
-        <div className="flex flex-col items-center w-full">
-          <button 
-            onClick={handleNext}
-            disabled={!selectedOption}
-            className={`w-full h-12 text-white font-semibold rounded-lg transition duration-200 flex items-center justify-center gap-2 shadow-md ${selectedOption ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-400 cursor-not-allowed'}`}>
-            Selanjutnya
-            <FaArrowRight className="w-4 h-4" />
-          </button>
-          <div className="w-full lg:max-w-md mt-2">
-            <ProgressBar current={4} total={7} />
+      <div className="fixed bottom-0 left-0 right-0 bg-[#FFDE3D] z-10">
+        <div className="w-full max-w-6xl mx-auto p-3 lg:p-2">
+          <div className="flex flex-col items-center w-full">
+            <button 
+              onClick={handleNext}
+              disabled={!selectedOption}
+              className={`w-full max-w-md h-10 lg:h-12 text-white font-semibold rounded-lg transition duration-200 flex items-center justify-center gap-2 shadow-md ${
+                selectedOption ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-400 cursor-not-allowed'
+              }`}
+            >
+              Selanjutnya
+              <FaArrowRight className="w-3 lg:w-4 h-3 lg:h-4" />
+            </button>
+            <div className="w-full max-w-md mt-1 lg:mt-2">
+              <ProgressBar current={4} total={7} />
+            </div>
           </div>
         </div>
       </div>
