@@ -13,22 +13,21 @@ interface M2Q1SceneProps {
 
 const M2Q1Scene: React.FC<M2Q1SceneProps> = ({ userName, onBack, onNext }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [isNotificationVisible, setNotificationVisible] = useState(true);
+  const [showPopup, setShowPopup] = useState(true);
   const [display, setDisplay] = useState('0');
   const [currentValue, setCurrentValue] = useState('');
   const [operator, setOperator] = useState<string | null>(null);
   const [previousValue, setPreviousValue] = useState<number | null>(null);
   const [waitingForOperand, setWaitingForOperand] = useState(false);
   const [calculationHistory, setCalculationHistory] = useState('');
-  const fullText = "Saatnya kita hitung-hitungan nih. Gunakan kalkulator dibawah untuk menjawab, jangan lupa dikirim ya. ⚠️ Pastikan jawab dengan benar, karena tidak ada pilihan kembali ya ";
+  const popupText = "Saatnya kita hitung-hitungan nih. Gunakan kalkulator dibawah untuk menjawab, jangan lupa dikirim ya. ⚠️ Pastikan jawab dengan benar, karena tidak ada pilihan kembali ya ";
 
   useEffect(() => {
     const sceneTimer = setTimeout(() => setIsVisible(true), 100);
-    const notificationTimer = setTimeout(() => setNotificationVisible(false), 8000);
-
+    const popupTimer = setTimeout(() => setShowPopup(false), 8000);
     return () => {
       clearTimeout(sceneTimer);
-      clearTimeout(notificationTimer);
+      clearTimeout(popupTimer);
     };
   }, []);
 
@@ -125,42 +124,60 @@ const M2Q1Scene: React.FC<M2Q1SceneProps> = ({ userName, onBack, onNext }) => {
   };
 
   const buttonBaseClasses = 'rounded-full font-semibold flex items-center justify-center shadow-sm transition-transform duration-100 active:scale-95 aspect-square';
-  const buttonSizeClasses = 'text-2xl sm:text-3xl';
+  const buttonSizeClasses = 'text-xl sm:text-lg lg:text-2xl';
 
   return (
     <div className="h-screen w-full flex flex-col bg-[#FFDE3D] relative overflow-hidden">
-      {/* Animated notification bar */}
-      <div
-        className={`w-full bg-red-600 text-white p-4 fixed top-0 left-0 right-0 z-20 transition-transform duration-500 ease-in-out ${
-          isNotificationVisible ? 'translate-y-0' : '-translate-y-full'
-        }`}
-      >
-        <div className="max-w-md mx-auto">
-          <div className="flex items-start gap-3">
-            <div className={`bg-white p-2 rounded-full flex-shrink-0 ${styles.emojiPop}`}>
-              <span className="text-xl sm:text-2xl">🖐️</span>
+      {/* Popup Modal */}
+      {showPopup && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full mx-4 overflow-hidden animate-in fade-in-0 zoom-in-95 duration-200">
+            {/* Header */}
+            <div className="bg-yellow-100 px-6 py-4 flex items-center gap-3">
+              <div className="bg-yellow-300 p-2 rounded-full">
+                <span className="text-xl">📝</span>
+              </div>
+              <h3 className="text-lg font-bold text-gray-900">Instruksi Penting</h3>
             </div>
-            <p className="text-base font-medium flex-1 text-left">
-              {fullText}
+            
+            {/* Content */}
+            <div className="p-6">
+              <p className="text-gray-800 leading-relaxed mb-6">
+                {popupText}
+              </p>
+              
+              <div className="flex justify-center">
+                <button
+                  onClick={() => setShowPopup(false)}
+                  className="px-8 py-2.5 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-medium rounded-lg transition-all duration-200 hover:shadow-md active:scale-95"
+                >
+                  Oke, Mengerti
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Main Content Area */}
+      <div className="flex-1 w-full overflow-y-auto pb-16 lg:pb-20 flex items-center justify-center">
+        <div className="w-full max-w-7xl mx-auto flex flex-col lg:flex-row lg:gap-4 p-4 lg:px-8 transition-all duration-500 ease-in-out lg:items-center">
+        
+        {/* Question Section */}
+        <div className="w-full lg:w-3/5 mb-6 lg:mb-0 flex items-center">
+          <div className="bg-white/50 rounded-xl p-4 lg:p-6 shadow w-full flex items-center justify-center min-h-[200px] lg:min-h-[300px]">
+            <p className="text-base lg:text-lg xl:text-xl text-black text-center w-full leading-relaxed">
+              Jadi gini, kami sudah keluarkan Rp300.000 untuk iklan Facebook itu. Dari situ, kami senang sekali karena berhasil mendapatkan 10 pelanggan baru yang pertama kali datang dan belanja di toko kami. Nah, menurut <strong>{userName}</strong>, kalau saya mau raih 25 pelanggan baru, saya perlu siapkan uang berapa ya?
             </p>
           </div>
         </div>
-      </div>
-
-      {/* Main Content Area */}
-      <div className="flex-grow w-full overflow-y-auto pb-24">
-        <div className={`w-full max-w-md mx-auto flex flex-col p-4 transition-all duration-500 ease-in-out ${
-          isNotificationVisible ? 'pt-40' : 'pt-8'
-        }`}>
-        <div className="w-full max-w-md text-center">
-          <p className="text-lg sm:text-xl text-black mb-6 bg-white/50 rounded-xl p-4 shadow">
-            Jadi gini, kami sudah keluarkan Rp300.000 untuk iklan Facebook itu. Dari situ, kami senang sekali karena berhasil mendapatkan 10 pelanggan baru yang pertama kali datang dan belanja di toko kami. Nah, menurut <strong>{userName}</strong>, kalau saya mau raih 25 pelanggan baru, saya perlu siapkan uang berapa ya?
-          </p>
-        </div>
-        <div className="bg-white rounded-2xl shadow-2xl p-4 sm:p-6">
-          <div className="text-right text-gray-500 text-lg sm:text-xl mb-2 pr-2 h-7 sm:h-8 truncate">{calculationHistory || ' '}</div>
-          <div className="text-right text-black font-light mb-4 sm:mb-6 pr-2 text-5xl sm:text-6xl overflow-x-auto whitespace-nowrap">{display}</div>
-          <div className="grid grid-cols-4 gap-2 sm:gap-3">
+        
+        {/* Calculator Section */}
+        <div className="w-full lg:w-2/5">
+          <div className="bg-white rounded-2xl shadow-2xl p-2 lg:p-2">
+          <div className="text-right text-gray-500 text-xs lg:text-sm mb-1 pr-2 h-4 lg:h-4 truncate">{calculationHistory || ' '}</div>
+          <div className="text-right text-black font-light mb-1 lg:mb-2 pr-2 text-6xl sm:text-3xl lg:text-5xl xl:text-7xl overflow-x-auto whitespace-nowrap">{display}</div>
+          <div className="grid grid-cols-4 gap-1 lg:gap-1">
             <button className={`${buttonBaseClasses} ${buttonSizeClasses} bg-gray-300 text-black`} onClick={handleClearClick}>C</button>
             <button className={`${buttonBaseClasses} ${buttonSizeClasses} bg-gray-300 text-black`} onClick={handleToggleSignClick}>+/-</button>
             <button className={`${buttonBaseClasses} ${buttonSizeClasses} bg-gray-300 text-black`} onClick={handlePercentageClick}>%</button>
@@ -186,12 +203,13 @@ const M2Q1Scene: React.FC<M2Q1SceneProps> = ({ userName, onBack, onNext }) => {
             <button className={`${buttonBaseClasses} ${buttonSizeClasses} bg-gray-300 text-black`} onClick={handleBackspaceClick}>⌫</button>
             <button className={`${buttonBaseClasses} ${buttonSizeClasses} bg-blue-500 text-white`} onClick={handleEqualsClick}>=</button>
           </div>
+          </div>
         </div>
         </div>
       </div>
 
       {/* Bottom Navigation */}
-      <div className="w-full max-w-md mx-auto p-4 z-10 bg-[#FFDE3D] fixed bottom-0 left-0 right-0">
+      <div className="w-full max-w-md lg:max-w-7xl mx-auto p-3 lg:p-4 z-10 bg-[#FFDE3D] fixed bottom-0 left-0 right-0">
         <div className="flex flex-row justify-center w-full">
           <button 
             onClick={() => {
@@ -200,7 +218,7 @@ const M2Q1Scene: React.FC<M2Q1SceneProps> = ({ userName, onBack, onNext }) => {
               const score = (normalizedDisplay === correctAnswers.M2Q1) ? 1 : 0;
               onNext(score);
             }}
-            className='flex-1 h-12 text-white font-semibold rounded-lg transition duration-200 flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 shadow-md'>
+            className='flex-1 lg:max-w-md h-10 lg:h-12 text-white font-semibold rounded-lg transition duration-200 flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 shadow-md'>
             Kirim Jawaban
             <FaArrowRight className="w-4 h-4" />
           </button>
