@@ -41,6 +41,7 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
   ]);
 
   const [isCorrect, setIsCorrect] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
   const correctCombination = ['headline', 'description'];
 
@@ -53,12 +54,17 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
 
 
 
+  const handleDragEnd = () => {
+    setIsDragging(false);
+  };
+
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>, optionId: string) => {
     if (options.find(opt => opt.id === optionId)?.dropped) {
         e.preventDefault();
         return;
     }
     e.dataTransfer.setData('optionId', optionId);
+    setIsDragging(true);
   };
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
@@ -67,6 +73,7 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>, slotId: string) => {
     e.preventDefault();
+    setIsDragging(false);
     const optionId = e.dataTransfer.getData('optionId');
     const draggedOption = options.find(opt => opt.id === optionId);
 
@@ -138,6 +145,7 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
                 key={option.id}
                 draggable={!option.dropped}
                 onDragStart={(e) => handleDragStart(e, option.id)}
+                onDragEnd={handleDragEnd}
                 className={`py-2 px-4 rounded-lg font-semibold transition-all duration-200 ease-in-out shadow-md ${ 
                   option.dropped 
                   ? 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-60'
@@ -154,11 +162,12 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
                 <div
                   onDragOver={handleDragOver}
                   onDrop={(e) => handleDrop(e, slot.id)}
-                  className="bg-gray-100 border-2 border-dashed border-gray-400 text-gray-500 text-sm sm:text-lg font-medium py-6 rounded-xl w-1/2 h-24 flex items-center justify-center text-center transition-colors duration-200 hover:border-blue-500">
+                  className={`${styles.dropSlot} ${isDragging ? styles.dropSlotDragging : ''}`}>
+
                   {slot.content ? (
                     <span className="text-gray-800 font-bold p-2">{slot.content.text}</span>
                   ) : (
-                    'Drop di sini'
+                    '⬇️Tarik pilihanmu ke sini'
                   )}
                 </div>
                 {index === 0 && <span className="text-gray-800 text-2xl font-semibold">+</span>}
