@@ -49,8 +49,13 @@ const WelcomeScene: React.FC<WelcomeSceneProps> = ({ onNext }) => {
         </div>
         
         {/* Subheadline */}
-        <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 px-2">
+        <p className="text-sm sm:text-base text-gray-600 mb-2 px-2">
           Cari tahu tipe Digital Marketer seperti apakah kamu?
+        </p>
+        
+        {/* Duration */}
+        <p className="text-xs sm:text-sm text-gray-500 mb-4 sm:mb-6 px-2">
+          🕒10-15 menit
         </p>
 
         {/* CTA Button */}

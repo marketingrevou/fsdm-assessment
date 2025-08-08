@@ -42,7 +42,7 @@ const ChatScene: React.FC<ChatSceneProps> = ({ userData, onBack, onNext }) => {
   const conversation: Message[] = [
     { 
       id: 1,
-      text: 'Halo aku Ayu, owner dari kafe Kopi & Bunga Melati. Apakah benar ini dengan Anda?',
+      text: `Halo aku Ayu, owner dari kafe Kopi & Bunga Melati. Apakah benar ini dengan ${userData?.name || 'Anda'}?`,
       sender: 'bot',
       timestamp: new Date(),
       responses: ['Halo salam kenal! Ada yang bisa aku bantu?']
@@ -69,7 +69,7 @@ const ChatScene: React.FC<ChatSceneProps> = ({ userData, onBack, onNext }) => {
     },
     { 
       id: 5,
-      text: `Sudah, Anggaran kami ada di Rp.5.000.000 per bulan, apakah ${userData?.name || 'Anda'} bisa membantu?`,
+      text: `Sudah, anggaran kami ada di Rp.5.000.000 per bulan, apakah ${userData?.name || 'Anda'} bisa membantu?`,
       sender: 'bot',
       timestamp: new Date(),
       responses: [{
