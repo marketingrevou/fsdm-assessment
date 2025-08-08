@@ -12,7 +12,7 @@ const IntroPopup: React.FC<IntroPopupProps> = ({ onClose }) => {
         <p className={styles.icon}>📨</p>
         <h2 className={styles.title}>Pesan baru dari klien!</h2>
         <p className={styles.description}>
-          Kamu jadi Digital Marketer untuk Kafe Kopi & Bunga Melati. Balas pesannya, yuk!
+          Kamu jadi Digital Marketer untuk Kafe Kopi & Bunga Melati. Balas pesan dari klien dengan respon terbaik menurutmu 😉!
         </p>
         <button onClick={onClose} className={styles.button}>
           Mulai

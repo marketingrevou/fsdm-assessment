@@ -116,19 +116,27 @@ const ChatScene: React.FC<ChatSceneProps> = ({ userData, onBack, onNext }) => {
         (msg) => msg.id === currentBotMessage.id + 1
       );
       
-      // If there's a next message, send it after a short delay
+      // If there's a next message, show typing indicator and then send it after a delay
       if (nextMessage) {
+        // Show typing indicator
+        setIsTyping(true);
+        
         setTimeout(() => {
+          setIsTyping(false);
           setMessages(prev => [...prev, nextMessage]);
           
           // If the next message doesn't require a response and isn't the last message,
-          // automatically send the next bot message
+          // automatically send the next bot message with typing indicator
           if (!nextMessage.responses && nextMessage.id < conversation.length) {
             const followingMessage = conversation.find(msg => msg.id === nextMessage.id + 1);
             if (followingMessage) {
               setTimeout(() => {
-                setMessages(prev => [...prev, followingMessage]);
-                setIsBotResponding(false);
+                setIsTyping(true);
+                setTimeout(() => {
+                  setIsTyping(false);
+                  setMessages(prev => [...prev, followingMessage]);
+                  setIsBotResponding(false);
+                }, 1500);
               }, 1000);
               return;
             }
@@ -143,7 +151,7 @@ const ChatScene: React.FC<ChatSceneProps> = ({ userData, onBack, onNext }) => {
           if (nextMessage.responses) {
             setIsBotResponding(false);
           }
-        }, 1000);
+        }, 1500);
       } else {
         // If no next message, re-enable responses
         setIsBotResponding(false);
@@ -179,7 +187,10 @@ const ChatScene: React.FC<ChatSceneProps> = ({ userData, onBack, onNext }) => {
 
   // Simulate bot typing and send message
   const sendBotMessage = useCallback((message: Message) => {
+    // Show typing indicator first
     setIsTyping(true);
+    
+    // After a delay, show the message
     setTimeout(() => {
       setIsTyping(false);
       setMessages(prev => [...prev, message]);
@@ -190,11 +201,18 @@ const ChatScene: React.FC<ChatSceneProps> = ({ userData, onBack, onNext }) => {
       }
       
       // If this bot message doesn't require a response and isn't the last message,
-      // automatically send the next bot message
+      // automatically send the next bot message with typing indicator
       if (!message.responses && !message.showInvitation && message.id < conversation.length) {
         const nextMessage = conversation.find(msg => msg.id === message.id + 1);
         if (nextMessage) {
-          setTimeout(() => sendBotMessage(nextMessage), 1000);
+          // Add a delay before showing typing for the next message
+          setTimeout(() => {
+            setIsTyping(true);
+            // Then show the next message after typing delay
+            setTimeout(() => {
+              sendBotMessage(nextMessage);
+            }, 1500);
+          }, 1000);
         }
       }
       
@@ -202,16 +220,20 @@ const ChatScene: React.FC<ChatSceneProps> = ({ userData, onBack, onNext }) => {
       if (message.showInvitation) {
         setTimeout(() => setShowInvitation(true), 1000);
       }
-    }, 1500);
+    }, 1500); // Typing duration before showing the message
   }, [conversation]);
 
   // Start with first message when component mounts
   useEffect(() => {
     if (messages.length === 0 && conversation.length > 0) {
-      // Only send the first message automatically
+      // Show typing indicator before first message
+      setIsTyping(true);
+      
+      // Then show the first message after a delay
       const timer = setTimeout(() => {
+        setIsTyping(false);
         setMessages([conversation[0]]);
-      }, 1000);
+      }, 1500);
       
       return () => clearTimeout(timer);
     }
@@ -320,20 +342,18 @@ const ChatScene: React.FC<ChatSceneProps> = ({ userData, onBack, onNext }) => {
                     <div 
                       key={index} 
                       className={`${styles.responseButton} ${responseClass ? styles[responseClass] : ''} ${isBotResponding ? styles.disabledButton : ''}`}
+                      onClick={() => {
+                        if (!isBotResponding) {
+                          setHasClickedPaperplane(true);
+                          handleResponse(responseText);
+                        }
+                      }}
+                      style={{ cursor: isBotResponding ? 'not-allowed' : 'pointer' }}
                     >
                       <span className={styles.responseText}>{responseText}</span>
-                      <button
-                        onClick={() => {
-                          if (!isBotResponding) {
-                            setHasClickedPaperplane(true);
-                            handleResponse(responseText);
-                          }
-                        }}
-                        className={`${styles.sendButton} ${!hasClickedPaperplane ? styles.pulseButton : ''}`}
-                        disabled={isBotResponding}
-                      >
+                      <div className={`${styles.sendButton} ${!hasClickedPaperplane ? styles.pulseButton : ''}`}>
                         <FaPaperPlane style={{ color: 'white' }} />
-                      </button>
+                      </div>
                     </div>
                   );
                 })}

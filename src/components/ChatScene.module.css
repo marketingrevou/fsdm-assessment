@@ -337,27 +337,12 @@
   align-items: center;
   padding: 8px 12px;
   background-color: white;
-  border-radius: 15px;
+  border-radius: 18px;
   align-self: flex-start;
-  margin: 2px 0 10px 10px;
+  margin: 2px 0 10px 16px;
   box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
   width: auto;
   position: relative;
-}
-
-.typingIndicator::before {
-  content: '';
-  position: absolute;
-  left: -8px;
-  top: 0;
-  width: 0;
-  height: 0;
-  border: 10px solid transparent;
-  border-right-color: white;
-  border-left: 0;
-  border-top: 0;
-  margin-top: 0;
-  margin-left: -8px;
 }
 
 .typingDot {
