@@ -55,7 +55,7 @@ const WelcomeScene: React.FC<WelcomeSceneProps> = ({ onNext }) => {
         
         {/* Duration */}
         <p className="text-xs sm:text-sm text-gray-500 mb-4 sm:mb-6 px-2">
-          🕒10-15 menit
+          Waktu Pengerjaan: 🕒10-15 menit
         </p>
 
         {/* CTA Button */}
