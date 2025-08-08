@@ -45,7 +45,7 @@ const M3Q3Scene: React.FC<M3Q3SceneProps> = ({ onBack, onNext }) => {
               <span className="text-xl sm:text-2xl">🥲</span>
             </div>
             <p className="text-base font-medium flex-1 text-left">
-              Sebentar lagi kita berpisah, tapi aku mau lebih kenal tentang kamu dong.
+              Misi selesai! Sebelum kita berpisah, aku mau lebih kenal tentang kamu dong.
             </p>
           </div>
         </div>
@@ -69,7 +69,7 @@ const M3Q3Scene: React.FC<M3Q3SceneProps> = ({ onBack, onNext }) => {
             </div>
             
             <p className="text-gray-800 text-base sm:text-lg mb-4 font-medium">
-              Kamu sudah menyelesaikan semua misi kamu hari ini! Tapi sebelum kamu pergi, bolehkah kami tau kenapa kamu tertarik belajar Digital Marketing?
+            Tuliskan secara singkat kenapa kamu tertarik belajar Digital Marketing. Kamu dapat membagikan pengalaman belajar/kerja/organisasi yang pernah kamu jalani sebelumnya, ataupun tujuan yang ingin kamu capai.
             </p>
             
             <div className="mb-2">
@@ -111,7 +111,7 @@ const M3Q3Scene: React.FC<M3Q3SceneProps> = ({ onBack, onNext }) => {
               <div className="flex items-center justify-center">
                 <div className="bg-white rounded-2xl p-5 xl:p-6 shadow-lg w-full max-w-md">
                   <p className="text-base xl:text-lg text-black text-center leading-relaxed font-medium mb-6">
-                    Kamu sudah menyelesaikan semua misi kamu hari ini! Tapi sebelum kamu pergi, bolehkah kami tau kenapa kamu tertarik belajar Digital Marketing?
+                  Tuliskan secara singkat kenapa kamu tertarik belajar Digital Marketing. Kamu dapat membagikan pengalaman belajar/kerja/organisasi yang pernah kamu jalani sebelumnya, ataupun tujuan yang ingin kamu capai.
                   </p>
                   
                   <div className="space-y-2">
