@@ -16,6 +16,7 @@ const M3Q3Scene: React.FC<M3Q3SceneProps> = ({ onBack, onNext }) => {
   const [feedback, setFeedback] = useState<string>('');
   const [isPending, startTransition] = useTransition();
   const [isNotificationVisible, setIsNotificationVisible] = useState(true);
+  const [showError, setShowError] = useState(false);
   const maxLength = 250;
 
   // Auto-hide notification after 5 seconds
@@ -28,6 +29,11 @@ const M3Q3Scene: React.FC<M3Q3SceneProps> = ({ onBack, onNext }) => {
   }, []);
 
   const handleNext = async () => {
+    if (!feedback.trim()) {
+      setShowError(true);
+      return;
+    }
+    
     startTransition(async () => {
       await saveM3Q3Feedback(feedback);
       // Don't remove cookies here - ClosingScene needs them to fetch scores
@@ -81,8 +87,13 @@ const M3Q3Scene: React.FC<M3Q3SceneProps> = ({ onBack, onNext }) => {
                 rows={4}
                 placeholder="Tulis jawabanmu di sini (maks. 150 karakter)"
               />
-              <div className="text-right text-sm text-gray-500 mt-1 pr-1">
-                {feedback.length}/{maxLength}
+              <div className="flex justify-between items-center mt-1">
+                {showError && !feedback.trim() && (
+                  <p className="text-red-500 text-xs">Boleh diisi dulu ya sebelum lanjut 😉 </p>
+                )}
+                <div className="text-sm text-gray-500 ml-auto">
+                  {feedback.length}/{maxLength}
+                </div>
               </div>
             </div>
           </div>
@@ -122,8 +133,13 @@ const M3Q3Scene: React.FC<M3Q3SceneProps> = ({ onBack, onNext }) => {
                       className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent bg-gray-50 transition-shadow text-sm xl:text-base h-24 xl:h-28 resize-none"
                       placeholder="Tulis jawabanmu di sini (maks. 250 karakter)"
                     />
-                    <div className="text-right text-xs xl:text-sm text-gray-500 pr-1">
-                      {feedback.length}/{maxLength}
+                    <div className="flex justify-between items-center">
+                      {showError && !feedback.trim() && (
+                        <p className="text-red-500 text-xs">Harap isi alasan Anda sebelum melanjutkan</p>
+                      )}
+                      <div className="text-xs xl:text-sm text-gray-500 ml-auto">
+                        {feedback.length}/{maxLength}
+                      </div>
                     </div>
                   </div>
                 </div>
