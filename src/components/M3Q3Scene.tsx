@@ -131,7 +131,7 @@ const M3Q3Scene: React.FC<M3Q3SceneProps> = ({ onBack, onNext }) => {
                       onChange={(e) => setFeedback(e.target.value)}
                       maxLength={maxLength}
                       className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent bg-gray-50 transition-shadow text-sm xl:text-base h-24 xl:h-28 resize-none"
-                      placeholder="Tulis jawabanmu di sini (maks. 250 karakter)"
+                      placeholder="Mohon tulis minimal 100 kata tanpa menggunakan AI."
                     />
                     <div className="flex justify-between items-center">
                       {showError && !feedback.trim() && (

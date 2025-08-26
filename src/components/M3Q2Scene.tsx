@@ -9,6 +9,7 @@ interface M3Q2SceneProps {
   userName: string;
   onBack: () => void;
   onNext: () => void;
+  meetingTwoScore: number;
 }
 
 const M3Q2Scene: React.FC<M3Q2SceneProps> = ({ onBack, onNext }) => {

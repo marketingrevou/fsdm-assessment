@@ -211,7 +211,12 @@ export default function HomeClient() {
 
   const handleM3Q2Next = () => {
     console.log('M3Q2 - Next button clicked');
-    setCurrentScene('m3q3');
+    // Skip to closing scene if meeting two score is less than 3 (adjust threshold as needed)
+    if (meetingTwoScore < 3) {
+      setCurrentScene('closing');
+    } else {
+      setCurrentScene('m3q3');
+    }
   };
 
   const handleM3Q3Back = () => {
@@ -355,6 +360,7 @@ export default function HomeClient() {
           onBack={handleM3Q2Back}
           onNext={handleM3Q2Next}
           userName={userData.name}
+          meetingTwoScore={meetingTwoScore}
         />
       )}
       {currentScene === 'm3q3' && (
