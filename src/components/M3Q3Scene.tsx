@@ -17,7 +17,6 @@ const M3Q3Scene: React.FC<M3Q3SceneProps> = ({ onBack, onNext }) => {
   const [isPending, startTransition] = useTransition();
   const [isNotificationVisible, setIsNotificationVisible] = useState(true);
   const [showError, setShowError] = useState(false);
-  const maxLength = 250;
 
   // Auto-hide notification after 5 seconds
   useEffect(() => {
@@ -82,17 +81,16 @@ const M3Q3Scene: React.FC<M3Q3SceneProps> = ({ onBack, onNext }) => {
               <textarea
                 value={feedback}
                 onChange={(e) => setFeedback(e.target.value)}
-                maxLength={maxLength}
                 className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent bg-gray-50 transition-shadow"
                 rows={4}
-                placeholder="Tulis jawabanmu di sini (maks. 150 karakter)"
+                placeholder="Mohon tulis minimal 100 kata tanpa menggunakan AI."
               />
               <div className="flex justify-between items-center mt-1">
                 {showError && !feedback.trim() && (
                   <p className="text-red-500 text-xs">Boleh diisi dulu ya sebelum lanjut 😉 </p>
                 )}
                 <div className="text-sm text-gray-500 ml-auto">
-                  {feedback.length}/{maxLength}
+                  {feedback.length} karakter
                 </div>
               </div>
             </div>
@@ -129,7 +127,6 @@ const M3Q3Scene: React.FC<M3Q3SceneProps> = ({ onBack, onNext }) => {
                     <textarea
                       value={feedback}
                       onChange={(e) => setFeedback(e.target.value)}
-                      maxLength={maxLength}
                       className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent bg-gray-50 transition-shadow text-sm xl:text-base h-24 xl:h-28 resize-none"
                       placeholder="Mohon tulis minimal 100 kata tanpa menggunakan AI."
                     />
@@ -138,7 +135,7 @@ const M3Q3Scene: React.FC<M3Q3SceneProps> = ({ onBack, onNext }) => {
                         <p className="text-red-500 text-xs">Harap isi alasan Anda sebelum melanjutkan</p>
                       )}
                       <div className="text-xs xl:text-sm text-gray-500 ml-auto">
-                        {feedback.length}/{maxLength}
+                        {feedback.length} karakter
                       </div>
                     </div>
                   </div>
@@ -151,7 +148,7 @@ const M3Q3Scene: React.FC<M3Q3SceneProps> = ({ onBack, onNext }) => {
 
       {/* Bottom Navigation */}
       <div className="w-full max-w-md mx-auto p-4 z-10 bg-[#FFDE3D]">
-                <div className="flex flex-col items-center w-full">
+        <div className="flex flex-col items-center w-full">
           <div className="flex flex-row gap-4 w-full">
           <button 
             onClick={onBack}

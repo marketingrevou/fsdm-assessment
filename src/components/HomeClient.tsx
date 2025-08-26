@@ -212,7 +212,7 @@ export default function HomeClient() {
   const handleM3Q2Next = () => {
     console.log('M3Q2 - Next button clicked');
     // Skip to closing scene if meeting two score is less than 3 (adjust threshold as needed)
-    if (meetingTwoScore < 3) {
+    if (meetingTwoScore < 5) {
       setCurrentScene('closing');
     } else {
       setCurrentScene('m3q3');
