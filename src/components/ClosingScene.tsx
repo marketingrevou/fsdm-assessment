@@ -88,36 +88,19 @@ const ClosingScene: React.FC<ClosingSceneProps> = ({ userName }) => {
         
         {/* Thank you message */}
         <h1 className="text-xl sm:text-2xl font-bold text-black mb-1">
-          Terima kasih {userName}!
+          Selamat {userName}!
         </h1>
         
-        <p className="text-black mb-1 text-sm sm:text-base">
-          Kamu adalah seorang:
-        </p>
-        
-        {/* Marketer Type Image and Title */}
-        <div className={`w-full max-w-[200px] sm:max-w-[240px] mx-auto transition-all duration-1000 ease-out ${isAnimated ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <div className="aspect-square relative">
-            <Image
-              src={marketerType.imagePath}
-              alt={marketerType.type}
-              fill
-              sizes="(max-width: 640px) 200px, 240px"
-              className="object-contain"
-              priority
-              unoptimized
-            />
-          </div>
-        </div>
-        
-        {/* Question */}
         <p className="text-black text-sm sm:text-base mt-2">
-          Admission Counselor kami akan menjelaskan lebih lanjut potensi kamu di Digital Marketing.
+        🎉Kamu punya potensi di Digital Marketing. 📞Admission Counselor kami akan membantumu membedah hasilnya secara 1-on-1.
         </p>
       </div>
       
       {/* Bottom CTA */}
       <div className="w-full max-w-md mx-auto p-4 relative z-10">
+        <p className="text-black text-center mb-3 font-medium">
+          Mau tau hasilnya sekarang?
+        </p>
         <Link 
           href="https://wa.me/6281399100086" 
           target="_blank"
