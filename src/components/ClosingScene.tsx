@@ -92,7 +92,8 @@ const ClosingScene: React.FC<ClosingSceneProps> = ({ userName }) => {
         </h1>
         
         <p className="text-black text-sm sm:text-base mt-2">
-        🎉Kamu punya potensi di Digital Marketing. 📞Admission Counselor kami akan membantumu membedah hasilnya secara 1-on-1.
+        🎉Kamu punya potensi di Digital Marketing.
+        📞Admission Counselor kami akan membantumu membedah hasilnya secara 1-on-1.
         </p>
       </div>
       
