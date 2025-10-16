@@ -2,17 +2,16 @@ import React, { useState, useEffect, useTransition } from 'react';
 import Image from 'next/image';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import styles from './M3Q2Scene.module.css';
-import { saveM3Q2Feedback } from '@/app/actions/scoreActions';
 import ProgressBar from './ProgressBar';
 
 interface M3Q2SceneProps {
   userName: string;
   onBack: () => void;
-  onNext: () => void;
+  onNext: (essay: string) => void;
   meetingTwoScore: number;
 }
 
-const M3Q2Scene: React.FC<M3Q2SceneProps> = ({ onBack, onNext }) => {
+const M3Q2Scene: React.FC<M3Q2SceneProps> = ({ onBack, onNext, userName }) => {
   const [feedback, setFeedback] = useState<string>('');
   const [isPending, startTransition] = useTransition();
   const [isNotificationVisible, setIsNotificationVisible] = useState(true);
@@ -27,10 +26,10 @@ const M3Q2Scene: React.FC<M3Q2SceneProps> = ({ onBack, onNext }) => {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleNext = async () => {
-    startTransition(async () => {
-      await saveM3Q2Feedback(feedback);
-      onNext();
+  const handleNext = () => {
+    if (!feedback.trim()) return;
+    startTransition(() => {
+      onNext(feedback);
     });
   };
 

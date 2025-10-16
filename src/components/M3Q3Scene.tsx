@@ -2,17 +2,16 @@ import React, { useState, useEffect, useTransition } from 'react';
 import Image from 'next/image';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import styles from './M3Q3Scene.module.css';
-import { saveM3Q3Feedback } from '@/app/actions/scoreActions';
 import Cookies from 'js-cookie';
 import ProgressBar from './ProgressBar';
 
 interface M3Q3SceneProps {
-  userName: string;
   onBack: () => void;
-  onNext: () => void;
+  onNext: (motivation: string) => void;
+  userName: string;
 }
 
-const M3Q3Scene: React.FC<M3Q3SceneProps> = ({ onBack, onNext }) => {
+const M3Q3Scene: React.FC<M3Q3SceneProps> = ({ onBack, onNext, userName }) => {
   const [feedback, setFeedback] = useState<string>('');
   const [isPending, startTransition] = useTransition();
   const [isNotificationVisible, setIsNotificationVisible] = useState(true);
@@ -33,10 +32,10 @@ const M3Q3Scene: React.FC<M3Q3SceneProps> = ({ onBack, onNext }) => {
       return;
     }
     
-    startTransition(async () => {
-      await saveM3Q3Feedback(feedback);
-      // Don't remove cookies here - ClosingScene needs them to fetch scores
-      onNext();
+    startTransition(() => {
+      // Just pass the feedback to the parent component
+      // The parent will handle saving all responses together
+      onNext(feedback);
     });
   };
 
