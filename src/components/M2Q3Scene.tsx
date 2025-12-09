@@ -35,9 +35,9 @@ const M2Q3Scene: React.FC<M2Q3SceneProps> = ({ userName, onBack, onNext }) => {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col bg-[#FFDE3D] relative overflow-hidden">
+    <div className={`${styles.scrollContainer} bg-[#FFDE3D]`}>
       {/* Animated notification bar */}
-      <div className={`${styles.notificationBar} ${isVisible ? styles.slideInM2Q3 : ''} w-full bg-red-600 text-white p-3 lg:p-2 fixed top-0 left-0 right-0 z-20`}>
+      <div className={`${styles.notificationBar} ${isVisible ? styles.slideInM2Q3 : ''} w-full bg-red-600 text-white p-3 lg:p-2`}>
         <div className="max-w-md lg:max-w-6xl mx-auto">
           <div className="flex items-start gap-3">
             <div className="bg-white p-1.5 lg:p-1 rounded-full flex-shrink-0">
@@ -51,7 +51,7 @@ const M2Q3Scene: React.FC<M2Q3SceneProps> = ({ userName, onBack, onNext }) => {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 w-full flex flex-col items-center p-4 pt-20 lg:pt-16 pb-40 lg:pb-24 overflow-y-auto">
+      <div className={`${styles.mainContent} w-full flex flex-col items-center px-4`}>
         {/* Mobile Layout - Single Column */}
         <div className="lg:hidden w-full max-w-md mx-auto flex flex-col flex-1">
           <div className="relative w-full h-48 sm:h-64 mb-4 rounded-xl overflow-hidden shadow-lg">
@@ -72,7 +72,6 @@ const M2Q3Scene: React.FC<M2Q3SceneProps> = ({ userName, onBack, onNext }) => {
             {[
               { id: 'promo-a-largest', text: 'Promosi A karena rata-rata biaya per pelanggan paling besar' },
               { id: 'promo-b-largest', text: 'Promosi B karena rata-rata biaya per pelanggan paling besar' },
-              { id: 'promo-a-smallest', text: 'Promosi A karena rata-rata biaya per pelanggan paling kecil' },
               { id: 'promo-b-smallest', text: 'Promosi B karena rata-rata biaya per pelanggan paling kecil' },
             ].map((option) => (
               <button
@@ -112,7 +111,6 @@ const M2Q3Scene: React.FC<M2Q3SceneProps> = ({ userName, onBack, onNext }) => {
               {[
                 { id: 'promo-a-largest', text: 'Promosi A karena rata-rata biaya per pelanggan paling besar' },
                 { id: 'promo-b-largest', text: 'Promosi B karena rata-rata biaya per pelanggan paling besar' },
-                { id: 'promo-a-smallest', text: 'Promosi A karena rata-rata biaya per pelanggan paling kecil' },
                 { id: 'promo-b-smallest', text: 'Promosi B karena rata-rata biaya per pelanggan paling kecil' },
               ].map((option) => (
                 <button
@@ -135,7 +133,7 @@ const M2Q3Scene: React.FC<M2Q3SceneProps> = ({ userName, onBack, onNext }) => {
       </div>
 
       {/* Bottom Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 bg-[#FFDE3D] z-10 shadow-lg">
+      <div className="fixed bottom-0 left-0 right-0 bg-[#FFDE3D] z-10 shadow-lg" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
         <div className="w-full max-w-6xl mx-auto p-3 lg:p-2">
           <div className="flex flex-col items-center w-full">
             <button 
