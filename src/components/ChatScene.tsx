@@ -23,12 +23,12 @@ interface Message {
 }
 
 interface ChatSceneProps {
-  userData: { name?: string } | null;
+  userName: string;
   onBack: () => void;
   onNext?: () => void;
 }
 
-const ChatScene: React.FC<ChatSceneProps> = ({ userData, onBack, onNext }) => {
+const ChatScene: React.FC<ChatSceneProps> = ({ userName, onBack, onNext }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isTyping, setIsTyping] = useState(false);
   const [showInvitation, setShowInvitation] = useState(false);
@@ -42,7 +42,7 @@ const ChatScene: React.FC<ChatSceneProps> = ({ userData, onBack, onNext }) => {
   const conversation: Message[] = [
     { 
       id: 1,
-      text: `Halo aku Ayu, owner dari kafe Kopi & Bunga Melati. Apakah benar ini dengan ${userData?.name || 'Anda'}?`,
+      text: `Halo aku Ayu, owner dari kafe Kopi & Bunga Melati. Apakah benar ini dengan ${userName || 'Anda'}?`,
       sender: 'bot',
       timestamp: new Date(),
       responses: ['Halo salam kenal! Ada yang bisa aku bantu?']
