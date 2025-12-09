@@ -49,7 +49,7 @@ const ChatScene: React.FC<ChatSceneProps> = ({ userName, onBack, onNext }) => {
     },
     { 
       id: 2,
-      text: `Oke halo ${userData?.name || 'Anda'}, jadi kami baru buka dan butuh bantuan di bidang Digital Marketing`,
+      text: `Oke halo ${userName || 'Anda'}, jadi kami baru buka dan butuh bantuan di bidang Digital Marketing`,
       sender: 'bot',
       timestamp: new Date()
     },
@@ -69,7 +69,7 @@ const ChatScene: React.FC<ChatSceneProps> = ({ userName, onBack, onNext }) => {
     },
     { 
       id: 5,
-      text: `Sudah, anggaran kami ada di Rp.5.000.000 per bulan, apakah ${userData?.name || 'Anda'} bisa membantu?`,
+      text: `Sudah, anggaran kami ada di Rp.5.000.000 per bulan, apakah ${userName || 'Anda'} bisa membantu?`,
       sender: 'bot',
       timestamp: new Date(),
       responses: [{
@@ -177,8 +177,8 @@ const ChatScene: React.FC<ChatSceneProps> = ({ userName, onBack, onNext }) => {
       onNext();
     } else {
       // Fallback to URL-based navigation if onNext is not provided
-      if (userData?.name) {
-        window.location.href = `/?scene=meeting-cover&name=${encodeURIComponent(userData.name)}`;
+      if (userName) {
+        window.location.href = `/?scene=meeting-cover&name=${encodeURIComponent(userName)}`;
       } else {
         window.location.href = '/?scene=meeting-cover';
       }
