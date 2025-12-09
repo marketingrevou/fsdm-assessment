@@ -72,6 +72,7 @@ const M2Q3Scene: React.FC<M2Q3SceneProps> = ({ userName, onBack, onNext }) => {
             {[
               { id: 'promo-a-largest', text: 'Promosi A karena rata-rata biaya per pelanggan paling besar' },
               { id: 'promo-b-largest', text: 'Promosi B karena rata-rata biaya per pelanggan paling besar' },
+              { id: 'promo-a-smallest', text: 'Promosi A karena rata-rata biaya per pelanggan paling kecil' },
               { id: 'promo-b-smallest', text: 'Promosi B karena rata-rata biaya per pelanggan paling kecil' },
             ].map((option) => (
               <button
@@ -111,6 +112,7 @@ const M2Q3Scene: React.FC<M2Q3SceneProps> = ({ userName, onBack, onNext }) => {
               {[
                 { id: 'promo-a-largest', text: 'Promosi A karena rata-rata biaya per pelanggan paling besar' },
                 { id: 'promo-b-largest', text: 'Promosi B karena rata-rata biaya per pelanggan paling besar' },
+                { id: 'promo-a-smallest', text: 'Promosi A karena rata-rata biaya per pelanggan paling kecil' },
                 { id: 'promo-b-smallest', text: 'Promosi B karena rata-rata biaya per pelanggan paling kecil' },
               ].map((option) => (
                 <button
