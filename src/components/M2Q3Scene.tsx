@@ -35,7 +35,7 @@ const M2Q3Scene: React.FC<M2Q3SceneProps> = ({ userName, onBack, onNext }) => {
   };
 
   return (
-    <div className="h-screen w-full flex flex-col bg-[#FFDE3D] relative overflow-hidden">
+    <div className="min-h-screen w-full flex flex-col bg-[#FFDE3D] relative overflow-y-auto">
       {/* Animated notification bar */}
       <div className={`${styles.notificationBar} ${isVisible ? styles.slideInM2Q3 : ''} w-full bg-red-600 text-white p-3 lg:p-2 fixed top-0 left-0 right-0 z-20`}>
         <div className="max-w-md lg:max-w-6xl mx-auto">
@@ -51,9 +51,9 @@ const M2Q3Scene: React.FC<M2Q3SceneProps> = ({ userName, onBack, onNext }) => {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 w-full flex items-center justify-center p-4 pt-20 lg:pt-16 pb-32 lg:pb-24">
+      <div className="flex-1 w-full flex items-start justify-center p-4 pt-20 lg:pt-16 pb-32 lg:pb-24 overflow-y-auto">
         {/* Mobile Layout - Single Column */}
-        <div className="lg:hidden w-full max-w-md mx-auto flex flex-col overflow-y-auto">
+        <div className="lg:hidden w-full max-w-md mx-auto flex flex-col">
           <div className="relative w-full h-48 sm:h-64 mb-4 rounded-xl overflow-hidden shadow-lg">
             <Image
               src="/table1.png"
@@ -88,7 +88,7 @@ const M2Q3Scene: React.FC<M2Q3SceneProps> = ({ userName, onBack, onNext }) => {
         </div>
 
         {/* Desktop Layout - Side by Side */}
-        <div className="hidden lg:flex w-full max-w-6xl gap-6 h-full max-h-[calc(100vh-8rem)]">
+        <div className="hidden lg:flex w-full max-w-6xl gap-6 h-auto min-h-[calc(100vh-12rem)] py-4">
           {/* Left Side - Image */}
           <div className="w-1/2 flex flex-col justify-center">
             <div className="relative w-full h-full max-h-96 rounded-xl overflow-hidden bg-ffde3d bg-opacity-20">
