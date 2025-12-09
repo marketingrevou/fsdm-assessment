@@ -35,7 +35,7 @@ const M2Q3Scene: React.FC<M2Q3SceneProps> = ({ userName, onBack, onNext }) => {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col bg-[#FFDE3D] relative overflow-y-auto">
+    <div className="min-h-screen w-full flex flex-col bg-[#FFDE3D] relative overflow-hidden">
       {/* Animated notification bar */}
       <div className={`${styles.notificationBar} ${isVisible ? styles.slideInM2Q3 : ''} w-full bg-red-600 text-white p-3 lg:p-2 fixed top-0 left-0 right-0 z-20`}>
         <div className="max-w-md lg:max-w-6xl mx-auto">
@@ -51,9 +51,9 @@ const M2Q3Scene: React.FC<M2Q3SceneProps> = ({ userName, onBack, onNext }) => {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 w-full flex items-start justify-center p-4 pt-20 lg:pt-16 pb-32 lg:pb-24 overflow-y-auto">
+      <div className="flex-1 w-full flex flex-col items-center p-4 pt-20 lg:pt-16 pb-40 lg:pb-24 overflow-y-auto">
         {/* Mobile Layout - Single Column */}
-        <div className="lg:hidden w-full max-w-md mx-auto flex flex-col">
+        <div className="lg:hidden w-full max-w-md mx-auto flex flex-col flex-1">
           <div className="relative w-full h-48 sm:h-64 mb-4 rounded-xl overflow-hidden shadow-lg">
             <Image
               src="/table1.png"
@@ -135,7 +135,7 @@ const M2Q3Scene: React.FC<M2Q3SceneProps> = ({ userName, onBack, onNext }) => {
       </div>
 
       {/* Bottom Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 bg-[#FFDE3D] z-10">
+      <div className="fixed bottom-0 left-0 right-0 bg-[#FFDE3D] z-10 shadow-lg">
         <div className="w-full max-w-6xl mx-auto p-3 lg:p-2">
           <div className="flex flex-col items-center w-full">
             <button 
