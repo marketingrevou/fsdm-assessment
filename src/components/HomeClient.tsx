@@ -201,6 +201,56 @@ export default function HomeClient() {
 
   const handleM3Q3Back = () => setCurrentScene('m3q2');
   
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
+  // Function to submit all responses at once with error handling
+  const submitAllResponses = async (allResponses: typeof responses) => {
+    setIsSubmitting(true);
+    setSubmitError(null);
+    const errors = [];
+
+    try {
+      // Submit meeting two score
+      if (typeof allResponses.meetingTwoScore === 'number') {
+        const result = await saveMeetingTwoScore(allResponses.meetingTwoScore);
+        if (result?.error) {
+          errors.push(`Failed to save score: ${result.error}`);
+        }
+      }
+      
+      // Submit essay if it exists
+      if (allResponses.m3q2Essay?.trim()) {
+        const result = await saveM3Q2Feedback(allResponses.m3q2Essay);
+        if (result?.error) {
+          errors.push(`Failed to save essay: ${result.error}`);
+        }
+      }
+      
+      // Submit motivation if it exists
+      if (allResponses.m3q3Motivation?.trim()) {
+        const result = await saveM3Q3Feedback(allResponses.m3q3Motivation);
+        if (result?.error) {
+          errors.push(`Failed to save motivation: ${result.error}`);
+        }
+      }
+
+      if (errors.length > 0) {
+        throw new Error(errors.join('\n'));
+      }
+      
+      console.log('All responses submitted successfully');
+      return { success: true };
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to save responses';
+      console.error('Error submitting responses:', errorMessage);
+      setSubmitError(errorMessage);
+      return { success: false, error: errorMessage };
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const handleM3Q3Next = async (motivation: string) => {
     // Store motivation response
     const updatedResponses = {
@@ -209,30 +259,15 @@ export default function HomeClient() {
     };
     setResponses(updatedResponses);
     
-    // Submit all responses at once
-    await submitAllResponses(updatedResponses);
-    setCurrentScene('closing');
-  };
-
-  // Function to submit all responses at once
-  const submitAllResponses = async (allResponses: typeof responses) => {
-    try {
-      // Submit meeting two score
-      await saveMeetingTwoScore(allResponses.meetingTwoScore);
-      
-      // Submit essay if it exists
-      if (allResponses.m3q2Essay) {
-        await saveM3Q2Feedback(allResponses.m3q2Essay);
-      }
-      
-      // Submit motivation if it exists
-      if (allResponses.m3q3Motivation) {
-        await saveM3Q3Feedback(allResponses.m3q3Motivation);
-      }
-      
-      console.log('All responses submitted successfully');
-    } catch (error) {
-      console.error('Error submitting responses:', error);
+    // Submit all responses
+    const result = await submitAllResponses(updatedResponses);
+    
+    if (result.success) {
+      // Only proceed to next scene if submission was successful
+      setCurrentScene('closing');
+    } else {
+      // Optionally show an error message to the user
+      alert('There was an error saving your responses. Please try again.');
     }
   };
 

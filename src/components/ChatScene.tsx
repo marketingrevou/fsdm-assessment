@@ -8,12 +8,12 @@ import Image from 'next/image';
 import styles from './ChatScene.module.css';
 import QuizResultPopup from './QuizResultPopup';
 
-interface ResponseOption {
+export interface ResponseOption {
   text: string;
   className?: string;
 }
 
-interface Message {
+export interface Message {
   id: number;
   text: string;
   sender: 'user' | 'bot';
