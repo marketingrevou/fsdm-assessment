@@ -164,9 +164,20 @@ async function updateScores(updates: {
   });
 }
 
+// Define a type for the response data
+type ValidationResponse = {
+  data: {
+    essay_answer?: string;
+    meeting_three_score?: number;
+    motivation_answer?: string;
+  };
+  error?: string;
+};
+
 // Public API functions
-export async function saveM3Q2Feedback(essayAnswer: string): Promise<ActionResponse> {
+export async function saveM3Q2Feedback(essayAnswer: string): Promise<ValidationResponse> {
   try {
+    // Just validate but don't save yet
     if (!essayAnswer?.trim()) {
       throw new Error('Essay answer cannot be empty');
     }
@@ -176,29 +187,40 @@ export async function saveM3Q2Feedback(essayAnswer: string): Promise<ActionRespo
       throw new Error('Invalid score returned from essay grading');
     }
     
-    const result = await updateScores({
-      essayAnswer,
-      meetingThreeScore: gradedScore
-    });
-    return { data: result };
+    // Return the data without saving
+    return { 
+      data: {
+        essay_answer: essayAnswer,
+        meeting_three_score: gradedScore
+      }
+    };
   } catch (error) {
-    console.error('Error saving M3Q2 feedback:', error)
-    throw error
+    console.error('Error validating essay:', error);
+    return { 
+      data: {},
+      error: error instanceof Error ? error.message : 'Failed to validate essay'
+    };
   }
 }
 
-export async function saveM3Q3Feedback(motivationAnswer: string): Promise<ActionResponse> {
+export async function saveM3Q3Feedback(motivationAnswer: string): Promise<ValidationResponse> {
   try {
+    // Just validate but don't save yet
     if (!motivationAnswer?.trim()) {
       throw new Error('Motivation answer cannot be empty');
     }
     
-    const result = await updateScores({ motivationAnswer });
-    return { data: result };
-  } catch (error) {
-    console.error('Error in saveM3Q3Feedback:', error);
+    // Return the data without saving
     return { 
-      error: error instanceof Error ? error.message : 'Failed to save motivation feedback' 
+      data: { 
+        motivation_answer: motivationAnswer 
+      }
+    };
+  } catch (error) {
+    console.error('Error validating motivation:', error);
+    return { 
+      data: {},
+      error: error instanceof Error ? error.message : 'Failed to validate motivation'
     };
   }
 }

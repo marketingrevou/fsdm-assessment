@@ -26,6 +26,8 @@ import M3Q3Scene from '@/components/M3Q3Scene';
 import ClosingScene from '@/components/ClosingScene';
 import Cookies from 'js-cookie';
 import { saveMeetingTwoScore, saveM3Q2Feedback, saveM3Q3Feedback } from '@/app/actions/scoreActions';
+import { supabase } from '@/lib/supabase';
+import { cookies } from 'next/headers';
 
 export default function HomeClient() {
   const searchParams = useSearchParams();
@@ -204,46 +206,102 @@ export default function HomeClient() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  // Function to submit all responses at once with error handling
+  // Helper function to get person ID from cookies
+  const getPersonIdFromCookies = async (): Promise<string | null> => {
+    const cookieStore = await cookies();
+    const userName = cookieStore.get('userName')?.value;
+    const userEmail = cookieStore.get('userEmail')?.value;
+
+    if (!userName || !userEmail) {
+      console.error('User name or email not found in cookies');
+      return null;
+    }
+
+    const { data, error } = await supabase
+      .from('personal_details')
+      .select('id')
+      .eq('name', userName)
+      .eq('email', userEmail)
+      .single();
+
+    if (error) {
+      console.error('Error fetching person ID:', error);
+      return null;
+    }
+
+    return data?.id || null;
+  };
+
+  // Function to validate and submit all responses at once
   const submitAllResponses = async (allResponses: typeof responses) => {
     setIsSubmitting(true);
     setSubmitError(null);
-    const errors = [];
+    const errors: string[] = [];
+    const updates: any = {};
 
     try {
-      // Submit meeting two score
+      // 1. Validate all inputs first
+      
+      // Validate meeting two score
       if (typeof allResponses.meetingTwoScore === 'number') {
-        const result = await saveMeetingTwoScore(allResponses.meetingTwoScore);
-        if (result?.error) {
-          errors.push(`Failed to save score: ${result.error}`);
+        if (isNaN(allResponses.meetingTwoScore)) {
+          errors.push('Invalid meeting two score');
+        } else {
+          updates.meetingTwoScore = allResponses.meetingTwoScore;
         }
       }
       
-      // Submit essay if it exists
+      // Validate essay
       if (allResponses.m3q2Essay?.trim()) {
-        const result = await saveM3Q2Feedback(allResponses.m3q2Essay);
-        if (result?.error) {
-          errors.push(`Failed to save essay: ${result.error}`);
+        const essayResult = await saveM3Q2Feedback(allResponses.m3q2Essay);
+        if (essayResult.error) {
+          errors.push(`Essay validation failed: ${essayResult.error}`);
+        } else if (essayResult.data) {
+          Object.assign(updates, essayResult.data);
         }
       }
       
-      // Submit motivation if it exists
+      // Validate motivation
       if (allResponses.m3q3Motivation?.trim()) {
-        const result = await saveM3Q3Feedback(allResponses.m3q3Motivation);
-        if (result?.error) {
-          errors.push(`Failed to save motivation: ${result.error}`);
+        const motivationResult = await saveM3Q3Feedback(allResponses.m3q3Motivation);
+        if (motivationResult.error) {
+          errors.push(`Motivation validation failed: ${motivationResult.error}`);
+        } else if (motivationResult.data) {
+          Object.assign(updates, motivationResult.data);
         }
       }
 
+      // If any validation errors, stop here
       if (errors.length > 0) {
         throw new Error(errors.join('\n'));
+      }
+
+      // 2. All validations passed, now save to Supabase
+      const personId = await getPersonIdFromCookies();
+      if (!personId) {
+        throw new Error('User not authenticated');
+      }
+
+      const { error } = await supabase
+        .from('score')
+        .upsert({
+          person: personId,
+          ...updates,
+          updated_at: new Date().toISOString()
+        }, {
+          onConflict: 'person'
+        });
+
+      if (error) {
+        throw new Error(`Failed to save to database: ${error.message}`);
       }
       
       console.log('All responses submitted successfully');
       return { success: true };
+      
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to save responses';
-      console.error('Error submitting responses:', errorMessage);
+      console.error('Error in submitAllResponses:', errorMessage);
       setSubmitError(errorMessage);
       return { success: false, error: errorMessage };
     } finally {
@@ -259,15 +317,18 @@ export default function HomeClient() {
     };
     setResponses(updatedResponses);
     
-    // Submit all responses
-    const result = await submitAllResponses(updatedResponses);
-    
-    if (result.success) {
-      // Only proceed to next scene if submission was successful
-      setCurrentScene('closing');
-    } else {
-      // Optionally show an error message to the user
-      alert('There was an error saving your responses. Please try again.');
+    try {
+      // Only submit when test is complete
+      const result = await submitAllResponses(updatedResponses);
+      
+      if (result.success) {
+        setCurrentScene('closing');
+      } else {
+        alert('There was an error saving your responses. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error in handleM3Q3Next:', error);
+      alert('There was an error processing your submission. Please try again.');
     }
   };
 
