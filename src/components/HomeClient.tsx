@@ -231,11 +231,19 @@ export default function HomeClient() {
   };
 
   // Function to validate and submit all responses at once
+  // Define the shape of the updates object
+  interface SubmissionUpdates {
+    meeting_two_score?: number;
+    m3q2_essay?: string;
+    m3q3_motivation?: string;
+    [key: string]: unknown; // For any additional dynamic properties
+  }
+
   const submitAllResponses = async (allResponses: typeof responses) => {
     setIsSubmitting(true);
     setSubmitError(null);
     const errors: string[] = [];
-    const updates: any = {};
+    const updates: SubmissionUpdates = {};
 
     try {
       // 1. Check if all required fields are present
@@ -263,11 +271,11 @@ export default function HomeClient() {
           errors.push(`Essay validation failed: ${essayResult.error}`);
         } else if (essayResult.data) {
           // Convert any camelCase keys to snake_case
-          const snakeCaseData = Object.entries(essayResult.data).reduce((acc, [key, value]) => {
+          const snakeCaseData = Object.entries(essayResult.data).reduce<SubmissionUpdates>((acc, [key, value]) => {
             const snakeKey = key.replace(/([A-Z])/g, '_$1').toLowerCase();
-            acc[snakeKey] = value;
+            acc[snakeKey as keyof SubmissionUpdates] = value as SubmissionUpdates[keyof SubmissionUpdates];
             return acc;
-          }, {} as Record<string, any>);
+          }, {});
           Object.assign(updates, snakeCaseData);
         }
       }
@@ -279,11 +287,11 @@ export default function HomeClient() {
           errors.push(`Motivation validation failed: ${motivationResult.error}`);
         } else if (motivationResult.data) {
           // Convert any camelCase keys to snake_case
-          const snakeCaseData = Object.entries(motivationResult.data).reduce((acc, [key, value]) => {
+          const snakeCaseData = Object.entries(motivationResult.data).reduce<SubmissionUpdates>((acc, [key, value]) => {
             const snakeKey = key.replace(/([A-Z])/g, '_$1').toLowerCase();
-            acc[snakeKey] = value;
+            acc[snakeKey as keyof SubmissionUpdates] = value as SubmissionUpdates[keyof SubmissionUpdates];
             return acc;
-          }, {} as Record<string, any>);
+          }, {});
           Object.assign(updates, snakeCaseData);
         }
       }

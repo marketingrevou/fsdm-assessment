@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import Image from 'next/image';
 import styles from './M1Q3Scene.module.css';
@@ -48,6 +48,16 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
   const [touchTarget, setTouchTarget] = useState<HTMLElement | null>(null);
 
   const correctCombination = ['headline', 'description'];
+  
+  const resetQuiz = useCallback(() => {
+    setOptions(prevOptions => prevOptions.map(opt => ({ ...opt, dropped: false })));
+    setDropSlots([
+      { id: 'slot1', content: null },
+      { id: 'slot2', content: null },
+    ]);
+    setIsCorrect(false);
+    setShowPopup('none');
+  }, []);
 
   // Handle touch start for mobile
   const handleTouchStart = (e: React.TouchEvent, optionId: string) => {
@@ -125,20 +135,20 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
   };
 
   // Clean up touch feedback
-  const cleanupTouchFeedback = () => {
+  const cleanupTouchFeedback = useCallback(() => {
     if (touchTarget && document.body.contains(touchTarget)) {
       document.body.removeChild(touchTarget);
     }
-    setTouchTarget(null);
     setActiveDragItem(null);
-  };
+    setTouchTarget(null);
+  }, [touchTarget]);
 
   // Clean up on unmount
   useEffect(() => {
     return () => {
       cleanupTouchFeedback();
     };
-  }, []);
+  }, [cleanupTouchFeedback]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -189,6 +199,7 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
     }
   };
 
+
   useEffect(() => {
     if (dropSlots[0].content && dropSlots[1].content) {
       const droppedIds = [dropSlots[0].content.id, dropSlots[1].content.id].sort();
@@ -205,13 +216,7 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
         }, 2000);
       }
     }
-  }, [dropSlots]);
-
-  const resetQuiz = () => {
-    setOptions(options.map(opt => ({ ...opt, dropped: false })));
-    setDropSlots(dropSlots.map(slot => ({ ...slot, content: null })));
-    setIsCorrect(false);
-  };
+  }, [dropSlots, correctCombination, resetQuiz]);
 
   return (
     <div className="min-h-screen w-full flex flex-col bg-[#FFDE3D] relative">
