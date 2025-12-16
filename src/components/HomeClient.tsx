@@ -27,7 +27,6 @@ import ClosingScene from '@/components/ClosingScene';
 import Cookies from 'js-cookie';
 import { saveMeetingTwoScore, saveM3Q2Feedback, saveM3Q3Feedback } from '@/app/actions/scoreActions';
 import { supabase } from '@/lib/supabase';
-import { cookies } from 'next/headers';
 
 export default function HomeClient() {
   const searchParams = useSearchParams();
@@ -208,9 +207,8 @@ export default function HomeClient() {
 
   // Helper function to get person ID from cookies
   const getPersonIdFromCookies = async (): Promise<string | null> => {
-    const cookieStore = await cookies();
-    const userName = cookieStore.get('userName')?.value;
-    const userEmail = cookieStore.get('userEmail')?.value;
+    const userName = Cookies.get('userName');
+    const userEmail = Cookies.get('userEmail');
 
     if (!userName || !userEmail) {
       console.error('User name or email not found in cookies');
@@ -240,14 +238,21 @@ export default function HomeClient() {
     const updates: any = {};
 
     try {
-      // 1. Validate all inputs first
+      // 1. Check if all required fields are present
+      const requiredFields = ['meetingTwoScore', 'm3q2Essay', 'm3q3Motivation'];
+      const missingFields = requiredFields.filter(field => !allResponses[field as keyof typeof allResponses]);
       
-      // Validate meeting two score
+      if (missingFields.length > 0) {
+        console.log('Not all fields are completed yet. Missing:', missingFields);
+        return { success: false, error: 'Please complete all questions before submitting.' };
+      }
+      
+      // 2. Validate all inputs
       if (typeof allResponses.meetingTwoScore === 'number') {
         if (isNaN(allResponses.meetingTwoScore)) {
           errors.push('Invalid meeting two score');
         } else {
-          updates.meetingTwoScore = allResponses.meetingTwoScore;
+          updates.meeting_two_score = allResponses.meetingTwoScore;
         }
       }
       
@@ -257,7 +262,13 @@ export default function HomeClient() {
         if (essayResult.error) {
           errors.push(`Essay validation failed: ${essayResult.error}`);
         } else if (essayResult.data) {
-          Object.assign(updates, essayResult.data);
+          // Convert any camelCase keys to snake_case
+          const snakeCaseData = Object.entries(essayResult.data).reduce((acc, [key, value]) => {
+            const snakeKey = key.replace(/([A-Z])/g, '_$1').toLowerCase();
+            acc[snakeKey] = value;
+            return acc;
+          }, {} as Record<string, any>);
+          Object.assign(updates, snakeCaseData);
         }
       }
       
@@ -267,7 +278,13 @@ export default function HomeClient() {
         if (motivationResult.error) {
           errors.push(`Motivation validation failed: ${motivationResult.error}`);
         } else if (motivationResult.data) {
-          Object.assign(updates, motivationResult.data);
+          // Convert any camelCase keys to snake_case
+          const snakeCaseData = Object.entries(motivationResult.data).reduce((acc, [key, value]) => {
+            const snakeKey = key.replace(/([A-Z])/g, '_$1').toLowerCase();
+            acc[snakeKey] = value;
+            return acc;
+          }, {} as Record<string, any>);
+          Object.assign(updates, snakeCaseData);
         }
       }
 
@@ -282,22 +299,35 @@ export default function HomeClient() {
         throw new Error('User not authenticated');
       }
 
-      const { error } = await supabase
-        .from('score')
-        .upsert({
-          person: personId,
-          ...updates,
-          updated_at: new Date().toISOString()
-        }, {
-          onConflict: 'person'
-        });
-
-      if (error) {
-        throw new Error(`Failed to save to database: ${error.message}`);
+      // Only proceed if we have all required data
+      if (updates.meeting_two_score !== undefined && 
+          allResponses.m3q2Essay && 
+          allResponses.m3q3Motivation) {
+        
+        // Add essay and motivation to updates
+        updates.essay_answer = allResponses.m3q2Essay;
+        updates.motivation_answer = allResponses.m3q3Motivation;
+        
+        const { error } = await supabase
+          .from('score')
+          .upsert({
+            person: personId,
+            ...updates,
+            updated_at: new Date().toISOString()
+          }, {
+            onConflict: 'person'
+          });
+          
+        if (error) {
+          throw new Error(`Failed to save to database: ${error.message}`);
+        }
+        
+        console.log('All responses submitted successfully');
+        return { success: true };
+      } else {
+        console.log('Not all data is ready for submission yet');
+        return { success: false, error: 'Not all data is ready for submission' };
       }
-      
-      console.log('All responses submitted successfully');
-      return { success: true };
       
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to save responses';
