@@ -14,7 +14,7 @@ const ClosingScene: React.FC<ClosingSceneProps> = ({ userName }) => {
   const [isAnimated, setIsAnimated] = useState(false);
   const [runConfetti, setRunConfetti] = useState(false);
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
-  const [marketerType, setMarketerType] = useState({ type: 'Curious Marketer', imagePath: '/marketer-type/curious.svg' });
+  const [marketerType, setMarketerType] = useState({ type: 'Curious Marketer', imagePath: '/marketer-type/curious.svg' }); // Keep this for now as it's used in JSX
 
   useEffect(() => {
     setWindowSize({ width: window.innerWidth, height: window.innerHeight });

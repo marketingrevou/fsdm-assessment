@@ -12,7 +12,7 @@ interface M2Q7SceneProps {
   onNext: (score: number) => void;
 }
 
-const M2Q7Scene: React.FC<M2Q7SceneProps> = ({ onBack, onNext }) => {
+const M2Q7Scene: React.FC<M2Q7SceneProps> = ({ userName, onBack, onNext }) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   // Removed unused state and effect
 

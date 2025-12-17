@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import Image from 'next/image';
 import styles from './M1Q3Scene.module.css';
@@ -44,10 +44,10 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [touchStartX, setTouchStartX] = useState(0);
   const [touchStartY, setTouchStartY] = useState(0);
-  const [activeDragItem, setActiveDragItem] = useState<string | null>(null);
   const [touchTarget, setTouchTarget] = useState<HTMLElement | null>(null);
+  const [activeDragItem, setActiveDragItem] = useState<string | null>(null);
 
-  const correctCombination = ['headline', 'description'];
+  const correctCombination = useMemo(() => ['headline', 'description'], []);
   
   const resetQuiz = useCallback(() => {
     setOptions(prevOptions => prevOptions.map(opt => ({ ...opt, dropped: false })));
@@ -148,8 +148,8 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
     e.stopPropagation();
   };
 
-  // Handle tap to select functionality
-  const handleOptionTap = (optionId: string) => {
+  // Handle tap to select functionality for both mobile and desktop
+  const handleMobileTap = (optionId: string) => {
     const option = options.find(opt => opt.id === optionId);
     if (!option || option.dropped) return;
     
@@ -182,7 +182,7 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
       
       // If finger didn't move much, it's a tap
       if (deltaX < 5 && deltaY < 5) {
-        handleOptionTap(activeDragItem);
+        handleMobileTap(activeDragItem);
         cleanupTouchFeedback();
         return;
       }
@@ -236,50 +236,21 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
     document.querySelectorAll('[data-drop-slot]').forEach(el => {
       (el as HTMLElement).style.border = '';
     });
-    
-    // Remove touch feedback element if it exists
-    const existingFeedback = document.getElementById('touch-feedback');
-    if (existingFeedback && existingFeedback.parentNode) {
-      existingFeedback.parentNode.removeChild(existingFeedback);
+    if (touchTarget?.parentNode) {
+      touchTarget.parentNode.removeChild(touchTarget);
+      setTouchTarget(null);
     }
-    
-    // Clean up touch start attributes
-    document.querySelectorAll('[data-touch-start]').forEach(el => {
-      el.removeAttribute('data-touch-start');
-    });
-    
-    // Reset state
     setActiveDragItem(null);
-    setTouchTarget(null);
   }, [touchTarget]);
 
-  // Add click handler for non-touch devices
+  // Clean up function for component unmount
   useEffect(() => {
-    const handleClick = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      const optionElement = target.closest('[data-option-id]');
-      
-      if (optionElement && !('ontouchstart' in window)) {
-        const optionId = optionElement.getAttribute('data-option-id');
-        if (optionId) {
-          e.preventDefault();
-          handleOptionTap(optionId);
-        }
-      }
-    };
-    
-    // Add click event listeners for non-touch devices
-    if (!('ontouchstart' in window)) {
-      document.addEventListener('click', handleClick);
-    }
-    
     return () => {
-      cleanupTouchFeedback();
-      if (!('ontouchstart' in window)) {
-        document.removeEventListener('click', handleClick);
+      if (touchTarget?.parentNode) {
+        touchTarget.parentNode.removeChild(touchTarget);
       }
     };
-  }, [cleanupTouchFeedback, options]);
+  }, [touchTarget]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -374,18 +345,13 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
             {options.map((option) => (
               <div
                 key={option.id}
-                draggable={!option.dropped}
+                draggable={!option.dropped && !('ontouchstart' in window)}
                 onDragStart={(e) => handleDragStart(e, option.id)}
                 onDragEnd={handleDragEnd}
-                onTouchStart={(e) => handleTouchStart(e, option.id)}
-                onTouchMove={handleTouchMove}
-                onTouchEnd={handleTouchEnd}
-                onTouchCancel={cleanupTouchFeedback}
                 onClick={(e) => {
-                  // Handle click for devices that don't fire touch events
-                  if (!('ontouchstart' in window)) {
-                    handleOptionTap(option.id);
-                  }
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleMobileTap(option.id);
                 }}
                 data-option-id={option.id}
                 className={`py-2 px-4 rounded-lg font-semibold transition-all duration-200 ease-in-out shadow-md touch-manipulation select-none ${
@@ -413,9 +379,6 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
                 <div
                   onDragOver={handleDragOver}
                   onDrop={(e) => handleDrop(e, slot.id)}
-                  onTouchMove={handleTouchMove}
-                  onTouchEnd={handleTouchEnd}
-                  onTouchCancel={cleanupTouchFeedback}
                   data-drop-slot={slot.id}
                   className={`${styles.dropSlot} ${isDragging || activeDragItem ? styles.dropSlotDragging : ''} touch-manipulation select-none`}
                   style={{

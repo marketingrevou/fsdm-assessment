@@ -12,7 +12,7 @@ interface M2Q2SceneProps {
   onNext: (score: number) => void;
 }
 
-const M2Q2Scene: React.FC<M2Q2SceneProps> = ({ onBack, onNext }) => {
+const M2Q2Scene: React.FC<M2Q2SceneProps> = ({ userName, onBack, onNext }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [showPopup, setShowPopup] = useState(true);
   const [display, setDisplay] = useState('0');

@@ -12,7 +12,7 @@ interface M2Q5SceneProps {
   onNext: (score: number) => void;
 }
 
-const M2Q5Scene: React.FC<M2Q5SceneProps> = ({ onBack, onNext }) => {
+const M2Q5Scene: React.FC<M2Q5SceneProps> = ({ userName, onBack, onNext }) => {
   const [display, setDisplay] = useState('0');
   const [currentValue, setCurrentValue] = useState('');
   const [operator, setOperator] = useState<string | null>(null);
