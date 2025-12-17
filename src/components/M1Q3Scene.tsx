@@ -72,6 +72,9 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
     setTouchStartY(touch.clientY);
     setActiveDragItem(optionId);
     
+    // Store the touch start time for tap detection
+    (e.currentTarget as HTMLElement).setAttribute('data-touch-start', Date.now().toString());
+    
     // Create a visual feedback element
     const touchFeedback = document.createElement('div');
     touchFeedback.id = 'touch-feedback';
@@ -145,8 +148,46 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
     e.stopPropagation();
   };
 
+  // Handle tap to select functionality
+  const handleOptionTap = (optionId: string) => {
+    const option = options.find(opt => opt.id === optionId);
+    if (!option || option.dropped) return;
+    
+    // Find the first empty slot
+    const emptySlot = dropSlots.find(slot => slot.content === null);
+    if (!emptySlot) return;
+    
+    const mockEvent = {
+      preventDefault: () => {},
+      stopPropagation: () => {},
+      dataTransfer: {
+        getData: () => optionId
+      }
+    } as unknown as React.DragEvent<HTMLDivElement>;
+    
+    handleDrop(mockEvent, emptySlot.id);
+  };
+
   // Handle touch end for mobile
   const handleTouchEnd = (e: React.TouchEvent) => {
+    const target = e.currentTarget as HTMLElement;
+    const touchStartTime = parseInt(target.getAttribute('data-touch-start') || '0', 10);
+    const touchDuration = Date.now() - touchStartTime;
+    
+    // If it was a short tap (less than 300ms) and not a drag, treat as tap to select
+    if (touchDuration < 300 && touchTarget && activeDragItem) {
+      const touch = e.changedTouches[0];
+      const deltaX = Math.abs(touch.clientX - touchStartX);
+      const deltaY = Math.abs(touch.clientY - touchStartY);
+      
+      // If finger didn't move much, it's a tap
+      if (deltaX < 5 && deltaY < 5) {
+        handleOptionTap(activeDragItem);
+        cleanupTouchFeedback();
+        return;
+      }
+    }
+    
     // Reset all drop zone highlights
     document.querySelectorAll('[data-drop-slot]').forEach(el => {
       (el as HTMLElement).style.border = '';
@@ -202,17 +243,43 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
       existingFeedback.parentNode.removeChild(existingFeedback);
     }
     
+    // Clean up touch start attributes
+    document.querySelectorAll('[data-touch-start]').forEach(el => {
+      el.removeAttribute('data-touch-start');
+    });
+    
     // Reset state
     setActiveDragItem(null);
     setTouchTarget(null);
   }, [touchTarget]);
 
-  // Clean up on unmount
+  // Add click handler for non-touch devices
   useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      const optionElement = target.closest('[data-option-id]');
+      
+      if (optionElement && !('ontouchstart' in window)) {
+        const optionId = optionElement.getAttribute('data-option-id');
+        if (optionId) {
+          e.preventDefault();
+          handleOptionTap(optionId);
+        }
+      }
+    };
+    
+    // Add click event listeners for non-touch devices
+    if (!('ontouchstart' in window)) {
+      document.addEventListener('click', handleClick);
+    }
+    
     return () => {
       cleanupTouchFeedback();
+      if (!('ontouchstart' in window)) {
+        document.removeEventListener('click', handleClick);
+      }
     };
-  }, [cleanupTouchFeedback]);
+  }, [cleanupTouchFeedback, options]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -314,6 +381,12 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
                 onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}
                 onTouchCancel={cleanupTouchFeedback}
+                onClick={(e) => {
+                  // Handle click for devices that don't fire touch events
+                  if (!('ontouchstart' in window)) {
+                    handleOptionTap(option.id);
+                  }
+                }}
                 data-option-id={option.id}
                 className={`py-2 px-4 rounded-lg font-semibold transition-all duration-200 ease-in-out shadow-md touch-manipulation select-none ${
                   option.dropped 
