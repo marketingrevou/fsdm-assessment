@@ -207,27 +207,38 @@ export default function HomeClient() {
 
   // Helper function to get person ID from cookies
   const getPersonIdFromCookies = async (): Promise<string | null> => {
-    const userName = Cookies.get('userName');
-    const userEmail = Cookies.get('userEmail');
+    try {
+      const userName = Cookies.get('userName');
+      const userEmail = Cookies.get('userEmail');
 
-    if (!userName || !userEmail) {
-      console.error('User name or email not found in cookies');
+      if (!userName || !userEmail) {
+        console.error('User name or email not found in cookies. Available cookies:', 
+          Object.keys(Cookies.get()));
+        return null;
+      }
+
+      const { data, error } = await supabase
+        .from('personal_details')
+        .select('id')
+        .eq('name', userName)
+        .eq('email', userEmail)
+        .single();
+
+      if (error) {
+        console.error('Error fetching person ID from database:', error);
+        return null;
+      }
+
+      if (!data) {
+        console.error('No user found with the provided credentials');
+        return null;
+      }
+
+      return data.id;
+    } catch (error) {
+      console.error('Unexpected error in getPersonIdFromCookies:', error);
       return null;
     }
-
-    const { data, error } = await supabase
-      .from('personal_details')
-      .select('id')
-      .eq('name', userName)
-      .eq('email', userEmail)
-      .single();
-
-    if (error) {
-      console.error('Error fetching person ID:', error);
-      return null;
-    }
-
-    return data?.id || null;
   };
 
   // Function to validate and submit all responses at once
@@ -246,16 +257,35 @@ export default function HomeClient() {
     const updates: SubmissionUpdates = {};
 
     try {
-      // 1. Check if all required fields are present
+      // 1. First check authentication
+      const personId = await getPersonIdFromCookies();
+      if (!personId) {
+        // Log available cookies for debugging
+        const allCookies = Cookies.get();
+        console.error('Authentication failed. Available cookies:', Object.keys(allCookies));
+        
+        // Try to refresh the auth state
+        try {
+          const { data: { session } } = await supabase.auth.getSession();
+          console.log('Current auth session:', session ? 'exists' : 'none');
+        } catch (authError) {
+          console.error('Error checking auth session:', authError);
+        }
+        
+        throw new Error('Your session has expired. Please refresh the page and try again.');
+      }
+
+      // 2. Check if all required fields are present
       const requiredFields = ['meetingTwoScore', 'm3q2Essay', 'm3q3Motivation'];
       const missingFields = requiredFields.filter(field => !allResponses[field as keyof typeof allResponses]);
       
       if (missingFields.length > 0) {
-        console.log('Not all fields are completed yet. Missing:', missingFields);
-        return { success: false, error: 'Please complete all questions before submitting.' };
+        const errorMsg = 'Please complete all questions before submitting.';
+        console.log('Missing required fields:', missingFields);
+        return { success: false, error: errorMsg };
       }
       
-      // 2. Validate all inputs
+      // 3. Validate all inputs
       if (typeof allResponses.meetingTwoScore === 'number') {
         if (isNaN(allResponses.meetingTwoScore)) {
           errors.push('Invalid meeting two score');
@@ -266,33 +296,43 @@ export default function HomeClient() {
       
       // Validate essay
       if (allResponses.m3q2Essay?.trim()) {
-        const essayResult = await saveM3Q2Feedback(allResponses.m3q2Essay);
-        if (essayResult.error) {
-          errors.push(`Essay validation failed: ${essayResult.error}`);
-        } else if (essayResult.data) {
-          // Convert any camelCase keys to snake_case
-          const snakeCaseData = Object.entries(essayResult.data).reduce<SubmissionUpdates>((acc, [key, value]) => {
-            const snakeKey = key.replace(/([A-Z])/g, '_$1').toLowerCase();
-            acc[snakeKey as keyof SubmissionUpdates] = value as SubmissionUpdates[keyof SubmissionUpdates];
-            return acc;
-          }, {});
-          Object.assign(updates, snakeCaseData);
+        try {
+          const essayResult = await saveM3Q2Feedback(allResponses.m3q2Essay);
+          if (essayResult.error) {
+            errors.push(`Essay validation failed: ${essayResult.error}`);
+          } else if (essayResult.data) {
+            // Convert any camelCase keys to snake_case
+            const snakeCaseData = Object.entries(essayResult.data).reduce<SubmissionUpdates>((acc, [key, value]) => {
+              const snakeKey = key.replace(/([A-Z])/g, '_$1').toLowerCase();
+              acc[snakeKey as keyof SubmissionUpdates] = value as SubmissionUpdates[keyof SubmissionUpdates];
+              return acc;
+            }, {});
+            Object.assign(updates, snakeCaseData);
+          }
+        } catch (essayError) {
+          console.error('Error validating essay:', essayError);
+          errors.push('Failed to validate essay. Please try again.');
         }
       }
       
       // Validate motivation
       if (allResponses.m3q3Motivation?.trim()) {
-        const motivationResult = await saveM3Q3Feedback(allResponses.m3q3Motivation);
-        if (motivationResult.error) {
-          errors.push(`Motivation validation failed: ${motivationResult.error}`);
-        } else if (motivationResult.data) {
-          // Convert any camelCase keys to snake_case
-          const snakeCaseData = Object.entries(motivationResult.data).reduce<SubmissionUpdates>((acc, [key, value]) => {
-            const snakeKey = key.replace(/([A-Z])/g, '_$1').toLowerCase();
-            acc[snakeKey as keyof SubmissionUpdates] = value as SubmissionUpdates[keyof SubmissionUpdates];
-            return acc;
-          }, {});
-          Object.assign(updates, snakeCaseData);
+        try {
+          const motivationResult = await saveM3Q3Feedback(allResponses.m3q3Motivation);
+          if (motivationResult.error) {
+            errors.push(`Motivation validation failed: ${motivationResult.error}`);
+          } else if (motivationResult.data) {
+            // Convert any camelCase keys to snake_case
+            const snakeCaseData = Object.entries(motivationResult.data).reduce<SubmissionUpdates>((acc, [key, value]) => {
+              const snakeKey = key.replace(/([A-Z])/g, '_$1').toLowerCase();
+              acc[snakeKey as keyof SubmissionUpdates] = value as SubmissionUpdates[keyof SubmissionUpdates];
+              return acc;
+            }, {});
+            Object.assign(updates, snakeCaseData);
+          }
+        } catch (motivationError) {
+          console.error('Error validating motivation:', motivationError);
+          errors.push('Failed to validate motivation. Please try again.');
         }
       }
 
@@ -301,17 +341,8 @@ export default function HomeClient() {
         throw new Error(errors.join('\n'));
       }
 
-      // 2. All validations passed, now save to Supabase
-      const personId = await getPersonIdFromCookies();
-      if (!personId) {
-        throw new Error('User not authenticated');
-      }
-
-      // Only proceed if we have all required data
-      if (updates.meeting_two_score !== undefined && 
-          allResponses.m3q2Essay && 
-          allResponses.m3q3Motivation) {
-        
+      // 4. All validations passed, now save to Supabase
+      try {
         // Add essay and motivation to updates
         updates.essay_answer = allResponses.m3q2Essay;
         updates.motivation_answer = allResponses.m3q3Motivation;
@@ -327,19 +358,20 @@ export default function HomeClient() {
           });
           
         if (error) {
-          throw new Error(`Failed to save to database: ${error.message}`);
+          console.error('Database error details:', error);
+          throw new Error('Failed to save your responses. Please try again.');
         }
         
         console.log('All responses submitted successfully');
         return { success: true };
-      } else {
-        console.log('Not all data is ready for submission yet');
-        return { success: false, error: 'Not all data is ready for submission' };
+      } catch (dbError) {
+        console.error('Database operation failed:', dbError);
+        throw new Error('Failed to save your responses. Please check your connection and try again.');
       }
       
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to save responses';
-      console.error('Error in submitAllResponses:', errorMessage);
+      const errorMessage = error instanceof Error ? error.message : 'Failed to save responses. Please try again.';
+      console.error('Error in submitAllResponses:', error);
       setSubmitError(errorMessage);
       return { success: false, error: errorMessage };
     } finally {

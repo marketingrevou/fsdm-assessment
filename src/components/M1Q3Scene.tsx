@@ -334,8 +334,7 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
           </button>
           <button 
             onClick={onNext}
-            disabled={!isCorrect}
-            className={`flex-1 h-12 text-white font-semibold rounded-lg transition duration-200 flex items-center justify-center gap-2 ${isCorrect ? 'bg-green-500 hover:bg-green-600' : 'bg-gray-400 cursor-not-allowed'}`}>
+            className="flex-1 h-12 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg transition duration-200 flex items-center justify-center gap-2">
             Selanjutnya
             <FaArrowRight className="w-4 h-4" />
           </button>
