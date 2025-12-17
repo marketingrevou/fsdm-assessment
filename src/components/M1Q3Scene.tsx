@@ -79,32 +79,44 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
     touchFeedback.style.zIndex = '1000';
     touchFeedback.style.transform = 'translate(-50%, -50%)';
     touchFeedback.style.transition = 'transform 0.1s';
+    touchFeedback.style.whiteSpace = 'nowrap';
+    touchFeedback.style.userSelect = 'none';
+    touchFeedback.style.webkitUserSelect = 'none';
     
     const option = document.querySelector(`[data-option-id="${optionId}"]`);
     if (option) {
-      touchFeedback.innerHTML = option.textContent || '';
-      touchFeedback.style.padding = '8px 16px';
+      touchFeedback.textContent = option.textContent || '';
+      touchFeedback.style.padding = '12px 20px';
       touchFeedback.style.borderRadius = '0.5rem';
       touchFeedback.style.background = '#EC4899';
       touchFeedback.style.color = 'white';
-      touchFeedback.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
+      touchFeedback.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.2)';
+      touchFeedback.style.fontWeight = '600';
+      touchFeedback.style.fontSize = '0.95rem';
       document.body.appendChild(touchFeedback);
       setTouchTarget(touchFeedback);
+      
+      // Initial position
+      const rect = option.getBoundingClientRect();
+      touchFeedback.style.left = `${rect.left + rect.width / 2}px`;
+      touchFeedback.style.top = `${rect.top + rect.height / 2}px`;
     }
+    
+    // Prevent default to avoid scrolling and other touch behaviors
+    e.preventDefault();
   };
 
   // Handle touch move for mobile
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (!touchTarget) return;
+    if (!touchTarget || !activeDragItem) return;
     
     const touch = e.touches[0];
     touchTarget.style.left = `${touch.clientX}px`;
     touchTarget.style.top = `${touch.clientY}px`;
     
-    // Prevent scrolling while dragging
-    if (Math.abs(touch.clientX - touchStartX) > 5 || Math.abs(touch.clientY - touchStartY) > 5) {
-      e.preventDefault();
-    }
+    // Prevent scrolling and text selection while dragging
+    e.preventDefault();
+    e.stopPropagation();
   };
 
   // Handle touch end for mobile
@@ -115,19 +127,27 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
     }
 
     const touch = e.changedTouches[0];
-    const elements = document.elementsFromPoint(touch.clientX, touch.clientY);
-    const dropZone = elements.find(el => el.hasAttribute('data-drop-slot'));
+    
+    // Use document.elementFromPoint to find the drop target
+    const dropZone = document.elementFromPoint(touch.clientX, touch.clientY)?.closest('[data-drop-slot]');
     
     if (dropZone && activeDragItem) {
       const slotId = dropZone.getAttribute('data-drop-slot');
       if (slotId) {
         const mockEvent = {
           preventDefault: () => {},
+          stopPropagation: () => {},
           dataTransfer: {
             getData: () => activeDragItem
           }
         } as unknown as React.DragEvent<HTMLDivElement>;
-        handleDrop(mockEvent, slotId);
+        
+        // Find an empty slot or one with the same content to replace
+        const targetSlotIndex = dropSlots.findIndex(slot => slot.id === slotId && (slot.content === null || slot.content.id === activeDragItem));
+        
+        if (targetSlotIndex !== -1) {
+          handleDrop(mockEvent, slotId);
+        }
       }
     }
     
@@ -251,11 +271,20 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
                 onTouchEnd={handleTouchEnd}
                 onTouchCancel={cleanupTouchFeedback}
                 data-option-id={option.id}
-                className={`py-2 px-4 rounded-lg font-semibold transition-all duration-200 ease-in-out shadow-md touch-none select-none ${
+                className={`py-2 px-4 rounded-lg font-semibold transition-all duration-200 ease-in-out shadow-md touch-manipulation select-none ${
                   option.dropped 
                   ? 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-60'
-                  : 'bg-pink-500 text-white cursor-grab hover:bg-pink-600 active:scale-95 active:cursor-grabbing'
-                }`}>
+                  : 'bg-pink-500 text-white active:bg-pink-600 active:scale-95 active:shadow-inner'
+                }`}
+                style={{
+                  WebkitTapHighlightColor: 'transparent',
+                  WebkitTouchCallout: 'none',
+                  WebkitUserSelect: 'none',
+                  KhtmlUserSelect: 'none',
+                  MozUserSelect: 'none',
+                  msUserSelect: 'none',
+                  userSelect: 'none',
+                }}>
                 {option.text}
               </div>
             ))}
@@ -268,8 +297,18 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
                   onDragOver={handleDragOver}
                   onDrop={(e) => handleDrop(e, slot.id)}
                   onTouchMove={handleTouchMove}
+                  onTouchEnd={handleTouchEnd}
                   data-drop-slot={slot.id}
-                  className={`${styles.dropSlot} ${isDragging || activeDragItem ? styles.dropSlotDragging : ''} touch-none select-none`}>
+                  className={`${styles.dropSlot} ${isDragging || activeDragItem ? styles.dropSlotDragging : ''} touch-manipulation select-none`}
+                  style={{
+                    WebkitTapHighlightColor: 'transparent',
+                    WebkitTouchCallout: 'none',
+                    WebkitUserSelect: 'none',
+                    KhtmlUserSelect: 'none',
+                    MozUserSelect: 'none',
+                    msUserSelect: 'none',
+                    userSelect: 'none',
+                  }}>
 
                   {slot.content ? (
                     <span className="text-gray-800 font-bold p-2">{slot.content.text}</span>
