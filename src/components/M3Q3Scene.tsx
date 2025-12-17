@@ -15,8 +15,18 @@ const M3Q3Scene: React.FC<M3Q3SceneProps> = ({ onBack, onNext, userName }) => {
   const [feedback, setFeedback] = useState<string>('');
   const [isPending, startTransition] = useTransition();
   const [isNotificationVisible, setIsNotificationVisible] = useState(true);
-  const [showError, setShowError] = useState(false);
+  const [showError, setShowError] = useState<{empty?: boolean}>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [wordCount, setWordCount] = useState(0);
+
+  const countWords = (text: string): number => {
+    return text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+  };
+
+  const handleFeedbackChange = (text: string) => {
+    setFeedback(text);
+    setWordCount(countWords(text));
+  };
 
   // Auto-hide notification after 5 seconds
   useEffect(() => {
@@ -28,8 +38,14 @@ const M3Q3Scene: React.FC<M3Q3SceneProps> = ({ onBack, onNext, userName }) => {
   }, []);
 
   const handleNext = async () => {
-    if (!feedback.trim() || isSubmitting) {
-      setShowError(true);
+    // Prevent submission if input is empty
+    if (!feedback.trim()) {
+      setShowError({ empty: true });
+      return;
+    }
+    
+    // Prevent multiple submissions
+    if (isSubmitting) {
       return;
     }
     
@@ -94,17 +110,17 @@ const M3Q3Scene: React.FC<M3Q3SceneProps> = ({ onBack, onNext, userName }) => {
             <div className="mb-2">
               <textarea
                 value={feedback}
-                onChange={(e) => setFeedback(e.target.value)}
+                onChange={(e) => handleFeedbackChange(e.target.value)}
                 className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent bg-gray-50 transition-shadow"
                 rows={4}
                 placeholder="Mohon tulis minimal 100 kata tanpa menggunakan AI."
               />
               <div className="flex justify-between items-center mt-1">
-                {showError && !feedback.trim() && (
+                {showError.empty && (
                   <p className="text-red-500 text-xs">Boleh diisi dulu ya sebelum lanjut 😉 </p>
                 )}
                 <div className="text-sm text-gray-500 ml-auto">
-                  {feedback.length} karakter
+                  {wordCount} kata
                 </div>
               </div>
             </div>
@@ -140,16 +156,21 @@ const M3Q3Scene: React.FC<M3Q3SceneProps> = ({ onBack, onNext, userName }) => {
                   <div className="space-y-2">
                     <textarea
                       value={feedback}
-                      onChange={(e) => setFeedback(e.target.value)}
+                      onChange={(e) => handleFeedbackChange(e.target.value)}
                       className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent bg-gray-50 transition-shadow text-sm xl:text-base h-24 xl:h-28 resize-none"
-                      placeholder="Mohon tulis minimal 100 kata tanpa menggunakan AI."
+                      placeholder="Tuliskan alasan Anda di sini..."
                     />
-                    <div className="flex justify-between items-center">
-                      {showError && !feedback.trim() && (
+                    <div className="flex justify-between items-start">
+                      {showError.empty && (
                         <p className="text-red-500 text-xs">Harap isi alasan Anda sebelum melanjutkan</p>
                       )}
-                      <div className="text-xs xl:text-sm text-gray-500 ml-auto">
-                        {feedback.length} karakter
+                      <div className="flex flex-col items-end">
+                        <div className="text-xs xl:text-sm text-gray-500">
+                          {wordCount} kata
+                        </div>
+                        <div className="text-xs text-gray-400">
+                          {feedback.length} karakter
+                        </div>
                       </div>
                     </div>
                   </div>
