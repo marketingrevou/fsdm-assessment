@@ -16,6 +16,7 @@ const M3Q3Scene: React.FC<M3Q3SceneProps> = ({ onBack, onNext, userName }) => {
   const [isPending, startTransition] = useTransition();
   const [isNotificationVisible, setIsNotificationVisible] = useState(true);
   const [showError, setShowError] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Auto-hide notification after 5 seconds
   useEffect(() => {
@@ -27,16 +28,30 @@ const M3Q3Scene: React.FC<M3Q3SceneProps> = ({ onBack, onNext, userName }) => {
   }, []);
 
   const handleNext = async () => {
-    if (!feedback.trim()) {
+    if (!feedback.trim() || isSubmitting) {
       setShowError(true);
       return;
     }
     
-    startTransition(() => {
-      // Just pass the feedback to the parent component
-      // The parent will handle saving all responses together
-      onNext(feedback);
-    });
+    setIsSubmitting(true);
+    try {
+      await new Promise<void>((resolve) => {
+        startTransition(() => {
+          // Just pass the feedback to the parent component
+          // The parent will handle saving all responses together
+          onNext(feedback);
+          resolve();
+        });
+      });
+    } finally {
+      // In case of any error, we'll still want to re-enable the button
+      if (isPending) {
+        const timer = setTimeout(() => {
+          setIsSubmitting(false);
+        }, 2000); // Fallback in case the transition takes too long
+        return () => clearTimeout(timer);
+      }
+    }
   };
 
   return (
@@ -157,10 +172,28 @@ const M3Q3Scene: React.FC<M3Q3SceneProps> = ({ onBack, onNext, userName }) => {
           </button>
           <button 
             onClick={handleNext}
-            disabled={!feedback.trim()}
-            className={`flex-1 h-12 text-white font-semibold rounded-lg transition duration-200 flex items-center justify-center gap-2 shadow-md ${feedback.trim() ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-400 cursor-not-allowed'}`}>
-            Selanjutnya
-            <FaArrowRight className="w-4 h-4" />
+            disabled={!feedback.trim() || isSubmitting}
+            className={`flex-1 h-12 text-white font-semibold rounded-lg transition duration-200 flex items-center justify-center gap-2 shadow-md ${
+              !feedback.trim() 
+                ? 'bg-gray-400 cursor-not-allowed' 
+                : isSubmitting 
+                  ? 'bg-red-700 cursor-wait' 
+                  : 'bg-red-600 hover:bg-red-700'
+            }`}>
+            {isSubmitting ? (
+              <>
+                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Mengirim Jawaban...
+              </>
+            ) : (
+              <>
+                Selanjutnya
+                <FaArrowRight className="w-4 h-4" />
+              </>
+            )}
           </button>
           </div>
           <div className="w-full lg:max-w-md mt-2">
