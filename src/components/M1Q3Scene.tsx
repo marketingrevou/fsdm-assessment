@@ -61,7 +61,8 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
 
   // Handle touch start for mobile
   const handleTouchStart = (e: React.TouchEvent, optionId: string) => {
-    if (options.find(opt => opt.id === optionId)?.dropped) {
+    const option = options.find(opt => opt.id === optionId);
+    if (!option || option.dropped) {
       e.preventDefault();
       return;
     }
@@ -78,14 +79,16 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
     touchFeedback.style.pointerEvents = 'none';
     touchFeedback.style.zIndex = '1000';
     touchFeedback.style.transform = 'translate(-50%, -50%)';
-    touchFeedback.style.transition = 'transform 0.1s';
+    touchFeedback.style.transition = 'transform 0.05s';
     touchFeedback.style.whiteSpace = 'nowrap';
     touchFeedback.style.userSelect = 'none';
     touchFeedback.style.webkitUserSelect = 'none';
+    touchFeedback.style.touchAction = 'none';
+    touchFeedback.style.willChange = 'transform';
     
-    const option = document.querySelector(`[data-option-id="${optionId}"]`);
-    if (option) {
-      touchFeedback.textContent = option.textContent || '';
+    const optionElement = document.querySelector(`[data-option-id="${optionId}"]`);
+    if (optionElement) {
+      touchFeedback.textContent = option.text;
       touchFeedback.style.padding = '12px 20px';
       touchFeedback.style.borderRadius = '0.5rem';
       touchFeedback.style.background = '#EC4899';
@@ -93,17 +96,19 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
       touchFeedback.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.2)';
       touchFeedback.style.fontWeight = '600';
       touchFeedback.style.fontSize = '0.95rem';
+      
+      // Initial position
+      const rect = optionElement.getBoundingClientRect();
+      touchFeedback.style.left = `${rect.left + rect.width / 2}px`;
+      touchFeedback.style.top = `${rect.top + rect.height / 2}px`;
+      
       document.body.appendChild(touchFeedback);
       setTouchTarget(touchFeedback);
       
-      // Initial position
-      const rect = option.getBoundingClientRect();
-      touchFeedback.style.left = `${rect.left + rect.width / 2}px`;
-      touchFeedback.style.top = `${rect.top + rect.height / 2}px`;
+      // Prevent default after setting up the touch feedback
+      e.preventDefault();
+      e.stopPropagation();
     }
-    
-    // Prevent default to avoid scrolling and other touch behaviors
-    e.preventDefault();
   };
 
   // Handle touch move for mobile
@@ -111,16 +116,42 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
     if (!touchTarget || !activeDragItem) return;
     
     const touch = e.touches[0];
-    touchTarget.style.left = `${touch.clientX}px`;
-    touchTarget.style.top = `${touch.clientY}px`;
     
-    // Prevent scrolling and text selection while dragging
+    // Only update position if touch has moved significantly
+    const deltaX = Math.abs(touch.clientX - touchStartX);
+    const deltaY = Math.abs(touch.clientY - touchStartY);
+    
+    if (deltaX > 5 || deltaY > 5) {
+      touchTarget.style.left = `${touch.clientX}px`;
+      touchTarget.style.top = `${touch.clientY}px`;
+      
+      // Highlight potential drop zones
+      const elements = document.elementsFromPoint(touch.clientX, touch.clientY);
+      const dropZone = elements.find(el => el.hasAttribute('data-drop-slot'));
+      
+      // Reset all drop zones
+      document.querySelectorAll('[data-drop-slot]').forEach(el => {
+        (el as HTMLElement).style.border = '';
+      });
+      
+      // Highlight current drop zone
+      if (dropZone) {
+        (dropZone as HTMLElement).style.border = '2px dashed #EC4899';
+      }
+    }
+    
+    // Always prevent default to stop scrolling and other touch behaviors
     e.preventDefault();
     e.stopPropagation();
   };
 
   // Handle touch end for mobile
   const handleTouchEnd = (e: React.TouchEvent) => {
+    // Reset all drop zone highlights
+    document.querySelectorAll('[data-drop-slot]').forEach(el => {
+      (el as HTMLElement).style.border = '';
+    });
+
     if (!touchTarget || !activeDragItem) {
       cleanupTouchFeedback();
       return;
@@ -146,19 +177,32 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
         const targetSlotIndex = dropSlots.findIndex(slot => slot.id === slotId && (slot.content === null || slot.content.id === activeDragItem));
         
         if (targetSlotIndex !== -1) {
-          handleDrop(mockEvent, slotId);
+          // Add a small delay to make the drop feel more natural
+          setTimeout(() => {
+            handleDrop(mockEvent, slotId);
+          }, 50);
         }
       }
     }
     
-    cleanupTouchFeedback();
+    // Clean up with a small delay to ensure the drop is processed
+    setTimeout(cleanupTouchFeedback, 100);
   };
 
   // Clean up touch feedback
   const cleanupTouchFeedback = useCallback(() => {
-    if (touchTarget && document.body.contains(touchTarget)) {
-      document.body.removeChild(touchTarget);
+    // Reset all drop zone highlights
+    document.querySelectorAll('[data-drop-slot]').forEach(el => {
+      (el as HTMLElement).style.border = '';
+    });
+    
+    // Remove touch feedback element if it exists
+    const existingFeedback = document.getElementById('touch-feedback');
+    if (existingFeedback && existingFeedback.parentNode) {
+      existingFeedback.parentNode.removeChild(existingFeedback);
     }
+    
+    // Reset state
     setActiveDragItem(null);
     setTouchTarget(null);
   }, [touchTarget]);
@@ -298,6 +342,7 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
                   onDrop={(e) => handleDrop(e, slot.id)}
                   onTouchMove={handleTouchMove}
                   onTouchEnd={handleTouchEnd}
+                  onTouchCancel={cleanupTouchFeedback}
                   data-drop-slot={slot.id}
                   className={`${styles.dropSlot} ${isDragging || activeDragItem ? styles.dropSlotDragging : ''} touch-manipulation select-none`}
                   style={{
@@ -308,6 +353,8 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
                     MozUserSelect: 'none',
                     msUserSelect: 'none',
                     userSelect: 'none',
+                    touchAction: 'manipulation',
+                    transition: 'border-color 0.2s ease',
                   }}>
 
                   {slot.content ? (
