@@ -73,7 +73,12 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
     setActiveDragItem(optionId);
     
     // Store the touch start time for tap detection
-    (e.currentTarget as HTMLElement).setAttribute('data-touch-start', Date.now().toString());
+    const touchStartTime = Date.now();
+    (e.currentTarget as HTMLElement).setAttribute('data-touch-start', touchStartTime.toString());
+    
+    // Add active class to show visual feedback
+    const target = e.currentTarget as HTMLElement;
+    target.classList.add('active-touch');
     
     // Create a visual feedback element
     const touchFeedback = document.createElement('div');
@@ -81,13 +86,14 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
     touchFeedback.style.position = 'fixed';
     touchFeedback.style.pointerEvents = 'none';
     touchFeedback.style.zIndex = '1000';
-    touchFeedback.style.transform = 'translate(-50%, -50%)';
-    touchFeedback.style.transition = 'transform 0.05s';
+    touchFeedback.style.transform = 'translate(-50%, -50%) scale(0.9)';
+    touchFeedback.style.transition = 'all 0.15s ease';
     touchFeedback.style.whiteSpace = 'nowrap';
     touchFeedback.style.userSelect = 'none';
     touchFeedback.style.webkitUserSelect = 'none';
     touchFeedback.style.touchAction = 'none';
-    touchFeedback.style.willChange = 'transform';
+    touchFeedback.style.willChange = 'transform, opacity';
+    touchFeedback.style.opacity = '0.95';
     
     const optionElement = document.querySelector(`[data-option-id="${optionId}"]`);
     if (optionElement) {
@@ -148,7 +154,7 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
     e.stopPropagation();
   };
 
-  // Handle tap to select functionality for both mobile and desktop
+  // Handle tap to select functionality 
   const handleMobileTap = (optionId: string) => {
     const option = options.find(opt => opt.id === optionId);
     if (!option || option.dropped) return;
@@ -156,6 +162,15 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
     // Find the first empty slot
     const emptySlot = dropSlots.find(slot => slot.content === null);
     if (!emptySlot) return;
+    
+    // Add visual feedback for selection
+    const optionElement = document.querySelector(`[data-option-id="${optionId}"]`);
+    if (optionElement) {
+      optionElement.classList.add('tap-feedback');
+      setTimeout(() => {
+        optionElement.classList.remove('tap-feedback');
+      }, 200);
+    }
     
     const mockEvent = {
       preventDefault: () => {},
@@ -165,7 +180,10 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
       }
     } as unknown as React.DragEvent<HTMLDivElement>;
     
-    handleDrop(mockEvent, emptySlot.id);
+    // Small delay to allow the tap animation to be visible
+    setTimeout(() => {
+      handleDrop(mockEvent, emptySlot.id);
+    }, 50);
   };
 
   // Handle touch end for mobile
@@ -174,16 +192,22 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
     const touchStartTime = parseInt(target.getAttribute('data-touch-start') || '0', 10);
     const touchDuration = Date.now() - touchStartTime;
     
-    // If it was a short tap (less than 300ms) and not a drag, treat as tap to select
-    if (touchDuration < 300 && touchTarget && activeDragItem) {
+    // Remove active class
+    target.classList.remove('active-touch');
+    
+    // If it was a short tap (less than 500ms) and not a drag, treat as tap to select
+    if (touchDuration < 500 && activeDragItem) {
       const touch = e.changedTouches[0];
       const deltaX = Math.abs(touch.clientX - touchStartX);
       const deltaY = Math.abs(touch.clientY - touchStartY);
       
       // If finger didn't move much, it's a tap
-      if (deltaX < 5 && deltaY < 5) {
-        handleMobileTap(activeDragItem);
-        cleanupTouchFeedback();
+      if (deltaX < 10 && deltaY < 10) {
+        // Small delay to allow the tap animation to complete
+        setTimeout(() => {
+          handleMobileTap(activeDragItem);
+          cleanupTouchFeedback();
+        }, 100);
         return;
       }
     }
@@ -236,6 +260,12 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
     document.querySelectorAll('[data-drop-slot]').forEach(el => {
       (el as HTMLElement).style.border = '';
     });
+    
+    // Remove active class from all options
+    document.querySelectorAll('[data-option-id]').forEach(el => {
+      el.classList.remove('active-touch');
+    });
+    
     if (touchTarget?.parentNode) {
       touchTarget.parentNode.removeChild(touchTarget);
       setTouchTarget(null);
@@ -322,6 +352,25 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
 
   return (
     <div className="min-h-screen w-full flex flex-col bg-[#FFDE3D] relative">
+      <style jsx global>{`
+        [data-option-id] {
+          transition: transform 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+        }
+        [data-option-id].active-touch {
+          transform: scale(0.95);
+          background-color: #db2777 !important;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+        }
+        [data-option-id].tap-feedback {
+          transform: scale(0.95);
+          background-color: #db2777 !important;
+          box-shadow: 0 0 0 3px rgba(219, 39, 119, 0.5) !important;
+        }
+        #touch-feedback {
+          transition: transform 0.1s ease, opacity 0.1s ease;
+          transform-origin: center center;
+        }
+      `}</style>
       <div className={`${styles.notificationBar} ${isVisible ? styles.slideIn : ''} w-full bg-red-600 text-white p-4 fixed top-0 left-0 right-0 z-20`}>
         <div className="max-w-md mx-auto">
           <div className="flex items-start gap-3">
