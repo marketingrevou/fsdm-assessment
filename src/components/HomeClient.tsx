@@ -222,7 +222,8 @@ export default function HomeClient() {
         .select('id')
         .eq('name', userName)
         .eq('email', userEmail)
-        .single();
+        .limit(1)
+        .maybeSingle();
 
       if (error) {
         console.error('Error fetching person ID from database:', error);
