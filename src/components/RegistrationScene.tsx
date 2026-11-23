@@ -53,7 +53,7 @@ const RegistrationScene: React.FC<RegistrationSceneProps> = ({ onBack, onNext })
           </h2>
           <div className="w-full max-w-[200px] sm:max-w-[240px] mx-auto my-2 aspect-square relative">
             <Image
-              src="/GIF/ezgif.com-animated-gif-maker-5.gif"
+              src="/dm/GIF/ezgif.com-animated-gif-maker-5.gif"
               alt="Registration"
               fill
               sizes="(max-width: 640px) 200px, 240px"

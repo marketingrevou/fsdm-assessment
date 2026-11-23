@@ -24,7 +24,7 @@ const M2ToM3TransitionPopup: React.FC<M2ToM3TransitionPopupProps> = ({ userName,
       <div className={`bg-white p-6 sm:p-8 rounded-2xl w-full max-w-sm text-center shadow-2xl transition-all duration-300 m-4 ${isVisible ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}`}>
         <div className="mx-auto mb-4 w-40 h-40 sm:w-48 sm:h-48">
           <Image
-            src="/GIF/ezgif.com-animated-gif-maker-8.gif"
+            src="/dm/GIF/ezgif.com-animated-gif-maker-8.gif"
             alt="Thank You"
             width={200}
             height={200}

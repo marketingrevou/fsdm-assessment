@@ -1,0 +1,13 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "fsdm-assessment",
+  "account_id": "8383f94454bf227d879221677a72a9a1",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-11-20",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "observability": { "enabled": true }
+}

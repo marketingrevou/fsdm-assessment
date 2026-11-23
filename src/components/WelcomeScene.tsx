@@ -22,7 +22,7 @@ const WelcomeScene: React.FC<WelcomeSceneProps> = ({ onNext }) => {
         {/* Logo */}
         <div className="mb-2 sm:mb-4 w-16 h-16 sm:w-20 sm:h-20 relative">
           <Image 
-            src="/logorevou.png" 
+            src="/dm/logorevou.png" 
             alt="RevoU Logo" 
             fill
             sizes="(max-width: 640px) 64px, 80px"
@@ -39,7 +39,7 @@ const WelcomeScene: React.FC<WelcomeSceneProps> = ({ onNext }) => {
         {/* Animated GIF */}
         <div className="w-full max-w-[200px] sm:max-w-[240px] mx-auto my-2 sm:my-4 aspect-square relative">
           <Image
-            src="/GIF/ezgif.com-animated-gif-maker.gif"
+            src="/dm/GIF/ezgif.com-animated-gif-maker.gif"
             alt="Digital Marketing"
             fill
             sizes="(max-width: 640px) 240px, 280px"

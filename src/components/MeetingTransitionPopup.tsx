@@ -24,7 +24,7 @@ const MeetingTransitionPopup: React.FC<MeetingTransitionPopupProps> = ({ userNam
       <div className={`bg-white rounded-2xl shadow-xl w-full max-w-md mx-auto text-center p-6 sm:p-8 transform transition-transform duration-300 ${isVisible ? 'scale-100' : 'scale-95'}`}>
         <div className="relative w-40 h-40 sm:w-48 sm:h-48 mx-auto mb-4">
           <Image
-            src="/GIF/ezgif.com-animated-gif-maker-10.gif"
+            src="/dm/GIF/ezgif.com-animated-gif-maker-10.gif"
             alt="Thank You"
             layout="fill"
             objectFit="contain"

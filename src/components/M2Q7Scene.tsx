@@ -26,10 +26,10 @@ const M2Q7Scene: React.FC<M2Q7SceneProps> = ({ userName, onBack, onNext }) => {
   };
 
   const options = [
-    { id: 'A', imgSrc: '/img6.png' },
-    { id: 'B', imgSrc: '/img7.png' },
-    { id: 'C', imgSrc: '/img8.png' },
-    { id: 'D', imgSrc: '/img9.png' },
+    { id: 'A', imgSrc: '/dm/img6.png' },
+    { id: 'B', imgSrc: '/dm/img7.png' },
+    { id: 'C', imgSrc: '/dm/img8.png' },
+    { id: 'D', imgSrc: '/dm/img9.png' },
   ];
 
   return (

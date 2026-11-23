@@ -178,7 +178,7 @@ const M1Q2Scene: React.FC<M1Q2SceneProps> = ({ onBack, onNext }) => {
             <div className="text-center">
               <div className="relative w-24 h-24 mx-auto mb-4">
                 <Image
-                  src="/GIF/ezgif.com-animated-gif-maker-8.gif"
+                  src="/dm/GIF/ezgif.com-animated-gif-maker-8.gif"
                   alt="Correct Answer Illustration"
                   layout="fill"
                   objectFit="contain"

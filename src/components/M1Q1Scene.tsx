@@ -76,7 +76,7 @@ const M1Q1Scene: React.FC<M1Q1SceneProps> = ({ onBack, onNext }) => {
 
           <div className="relative w-full h-48 sm:h-64 mb-4 rounded-xl overflow-hidden bg-gray-100">
             <Image
-              src="/M1Q1/img13.png"
+              src="/dm/M1Q1/img13.png"
               alt="Cafe Products"
               layout="fill"
               objectFit="cover"
@@ -90,10 +90,10 @@ const M1Q1Scene: React.FC<M1Q1SceneProps> = ({ onBack, onNext }) => {
           
           <div className="grid grid-cols-2 gap-4">
             {[
-              { id: 'instagram', name: 'Instagram', logo: '/M1Q1/Instagram_icon.png' },
-              { id: 'linkedin', name: 'LinkedIn', logo: '/M1Q1/LinkedIn_logo_initials.png' },
-              { id: 'pinterest', name: 'Pinterest', logo: '/M1Q1/Pinterest-logo.png' },
-              { id: 'x-twitter', name: 'X (Twitter)', logo: '/M1Q1/X_logo.png' }
+              { id: 'instagram', name: 'Instagram', logo: '/dm/M1Q1/Instagram_icon.png' },
+              { id: 'linkedin', name: 'LinkedIn', logo: '/dm/M1Q1/LinkedIn_logo_initials.png' },
+              { id: 'pinterest', name: 'Pinterest', logo: '/dm/M1Q1/Pinterest-logo.png' },
+              { id: 'x-twitter', name: 'X (Twitter)', logo: '/dm/M1Q1/X_logo.png' }
             ].map((platform) => (
               <button
                 key={platform.id}
@@ -133,7 +133,7 @@ const M1Q1Scene: React.FC<M1Q1SceneProps> = ({ onBack, onNext }) => {
             
             <div className="relative w-full flex-1 rounded-xl overflow-hidden bg-gray-100 min-h-0">
               <Image
-                src="/M1Q1/img13.png"
+                src="/dm/M1Q1/img13.png"
                 alt="Cafe Products"
                 layout="fill"
                 objectFit="cover"
@@ -150,10 +150,10 @@ const M1Q1Scene: React.FC<M1Q1SceneProps> = ({ onBack, onNext }) => {
             
             <div className="grid grid-cols-2 gap-3 flex-1 content-center">
               {[
-                { id: 'instagram', name: 'Instagram', logo: '/M1Q1/Instagram_icon.png' },
-                { id: 'linkedin', name: 'LinkedIn', logo: '/M1Q1/LinkedIn_logo_initials.png' },
-                { id: 'pinterest', name: 'Pinterest', logo: '/M1Q1/Pinterest-logo.png' },
-                { id: 'x-twitter', name: 'X (Twitter)', logo: '/M1Q1/X_logo.png' }
+                { id: 'instagram', name: 'Instagram', logo: '/dm/M1Q1/Instagram_icon.png' },
+                { id: 'linkedin', name: 'LinkedIn', logo: '/dm/M1Q1/LinkedIn_logo_initials.png' },
+                { id: 'pinterest', name: 'Pinterest', logo: '/dm/M1Q1/Pinterest-logo.png' },
+                { id: 'x-twitter', name: 'X (Twitter)', logo: '/dm/M1Q1/X_logo.png' }
               ].map((platform) => (
                 <button
                   key={platform.id}
@@ -222,7 +222,7 @@ const M1Q1Scene: React.FC<M1Q1SceneProps> = ({ onBack, onNext }) => {
             <div className="text-center">
               <div className="relative w-24 h-24 mx-auto mb-4">
                 <Image
-                  src="/GIF/ezgif.com-animated-gif-maker-8.gif"
+                  src="/dm/GIF/ezgif.com-animated-gif-maker-8.gif"
                   alt="Correct Answer Illustration"
                   fill
                   sizes="96px"

@@ -35,8 +35,8 @@ const M2Q6Scene: React.FC<M2Q6SceneProps> = ({ userName, onBack, onNext }) => {
   };
 
   const options = [
-    { id: 'A', imgSrc: '/img4.png', likes: 50, comments: 100 },
-    { id: 'B', imgSrc: '/img5.png', likes: 100, comments: 200 },
+    { id: 'A', imgSrc: '/dm/img4.png', likes: 50, comments: 100 },
+    { id: 'B', imgSrc: '/dm/img5.png', likes: 100, comments: 200 },
   ];
 
   return (

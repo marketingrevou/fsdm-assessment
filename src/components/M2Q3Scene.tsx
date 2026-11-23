@@ -56,7 +56,7 @@ const M2Q3Scene: React.FC<M2Q3SceneProps> = ({ userName, onBack, onNext }) => {
         <div className="lg:hidden w-full max-w-md mx-auto flex flex-col flex-1">
           <div className="relative w-full h-48 sm:h-64 mb-4 rounded-xl overflow-hidden shadow-lg">
             <Image
-              src="/table1.png"
+              src="/dm/table1.png"
               alt="Promotion Data Table"
               layout="fill"
               objectFit="contain"
@@ -93,7 +93,7 @@ const M2Q3Scene: React.FC<M2Q3SceneProps> = ({ userName, onBack, onNext }) => {
           <div className="w-1/2 flex flex-col justify-center">
             <div className="relative w-full h-full max-h-96 rounded-xl overflow-hidden bg-ffde3d bg-opacity-20">
               <Image
-                src="/table1.png"
+                src="/dm/table1.png"
                 alt="Promotion Data Table"
                 layout="fill"
                 objectFit="contain"

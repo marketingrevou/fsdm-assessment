@@ -14,7 +14,7 @@ const ClosingScene: React.FC<ClosingSceneProps> = ({ userName }) => {
   const [isAnimated, setIsAnimated] = useState(false);
   const [runConfetti, setRunConfetti] = useState(false);
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
-  const [marketerType, setMarketerType] = useState({ type: 'Curious Marketer', imagePath: '/marketer-type/curious.svg' }); // Keep this for now as it's used in JSX
+  const [marketerType, setMarketerType] = useState({ type: 'Curious Marketer', imagePath: '/dm/marketer-type/curious.svg' }); // Keep this for now as it's used in JSX
 
   useEffect(() => {
     setWindowSize({ width: window.innerWidth, height: window.innerHeight });
@@ -78,7 +78,7 @@ const ClosingScene: React.FC<ClosingSceneProps> = ({ userName }) => {
         {/* Logo */}
         <div className="w-14 h-14 relative mb-1">
           <Image 
-            src="/logorevou.png" 
+            src="/dm/logorevou.png" 
             alt="RevoU Logo" 
             fill
             sizes="56px"

@@ -67,7 +67,7 @@ const M3Q1Scene: React.FC<M3Q1SceneProps> = ({ onBack, onNext }) => {
           <div className="flex-shrink-0">
             <div className="relative w-20 h-20 sm:w-24 sm:h-24 mx-auto bg-white/20 rounded-full shadow-lg flex items-center justify-center backdrop-blur-sm">
               <Image
-                src="/Ayu.png"
+                src="/dm/Ayu.png"
                 alt="Ayu - Kafe Owner"
                 width={80}
                 height={80}
@@ -98,7 +98,7 @@ const M3Q1Scene: React.FC<M3Q1SceneProps> = ({ onBack, onNext }) => {
           <div className="flex items-center justify-center flex-shrink-0 pt-2">
             <div className="relative w-full max-w-[120px] sm:max-w-[140px] lg:max-w-[160px] mx-auto">
               <Image
-                src="/GIF/ezgif.com-animated-gif-maker-6.gif"
+                src="/dm/GIF/ezgif.com-animated-gif-maker-6.gif"
                 alt="Character speaking"
                 width={140}
                 height={140}

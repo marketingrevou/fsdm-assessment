@@ -59,7 +59,7 @@ const M3Q2Scene: React.FC<M3Q2SceneProps> = ({ onBack, onNext, userName }) => {
           <div className="lg:hidden w-full bg-white rounded-2xl p-4 sm:p-6 shadow-lg">
             <div className="relative w-full aspect-square mb-4 rounded-xl overflow-hidden bg-gray-100">
               <Image
-                src="/Poster1.png"
+                src="/dm/Poster1.png"
                 alt="Poster Design"
                 layout="fill"
                 objectFit="contain"
@@ -92,7 +92,7 @@ const M3Q2Scene: React.FC<M3Q2SceneProps> = ({ onBack, onNext, userName }) => {
             <div className="lg:w-[45%] lg:max-w-xl">
               <div className="relative w-full aspect-square rounded-xl overflow-hidden shadow-lg">
                 <Image
-                  src="/Poster1.png"
+                  src="/dm/Poster1.png"
                   alt="Poster Design"
                   layout="fill"
                   objectFit="contain"

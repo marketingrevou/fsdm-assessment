@@ -15,7 +15,7 @@ const Meeting3CoverScene: React.FC<Meeting3CoverSceneProps> = ({ userName, onBac
       <div className="absolute top-0 left-0 w-full p-4 z-20 flex justify-center sm:justify-start">
         <div className="w-12 h-12 sm:w-16 sm:h-16 relative">
           <Image 
-            src="/logorevou.png" 
+            src="/dm/logorevou.png" 
             alt="RevoU Logo" 
             fill
             className="object-contain"
@@ -45,7 +45,7 @@ const Meeting3CoverScene: React.FC<Meeting3CoverSceneProps> = ({ userName, onBac
         {/* Animated GIF */}
         <div className="w-full max-w-[240px] sm:max-w-[280px] aspect-square relative mb-2">
           <Image
-            src="/GIF/ezgif.com-animated-gif-maker-4.gif"
+            src="/dm/GIF/ezgif.com-animated-gif-maker-4.gif"
             alt="Creativity"
             layout="fill"
             objectFit="contain"

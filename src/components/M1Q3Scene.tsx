@@ -482,7 +482,7 @@ const M1Q3Scene: React.FC<M1Q3SceneProps> = ({ onBack, onNext }) => {
           {showPopup === 'correct' ? (
             <>
               <div className="relative w-24 h-24 mx-auto mb-4">
-                <Image src="/GIF/ezgif.com-animated-gif-maker-8.gif" alt="Correct" layout="fill" objectFit="contain" unoptimized />
+                <Image src="/dm/GIF/ezgif.com-animated-gif-maker-8.gif" alt="Correct" layout="fill" objectFit="contain" unoptimized />
               </div>
               <h3 className="text-xl font-bold text-gray-800 mb-2">Kerja Bagus!</h3>
               <p className="text-gray-600 mb-6">

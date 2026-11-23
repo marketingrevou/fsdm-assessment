@@ -14,6 +14,7 @@
     "@fortawesome/free-solid-svg-icons": "^7.0.0",
     "@fortawesome/react-fontawesome": "^0.2.3",
     "@openai/agents": "^0.0.14",
+    "@opennextjs/cloudflare": "^1.20.18",
     "@supabase/supabase-js": "^2.53.0",
     "js-cookie": "^3.0.5",
     "next": "15.4.8",
@@ -41,6 +42,7 @@
     "jest-environment-jsdom": "^30.0.5",
     "tailwindcss": "^4",
     "ts-node": "^10.9.2",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wrangler": "^4.166.0"
   }
 }

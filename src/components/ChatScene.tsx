@@ -178,9 +178,9 @@ const ChatScene: React.FC<ChatSceneProps> = ({ userName, onBack, onNext }) => {
     } else {
       // Fallback to URL-based navigation if onNext is not provided
       if (userName) {
-        window.location.href = `/?scene=meeting-cover&name=${encodeURIComponent(userName)}`;
+        window.location.href = `/dm?scene=meeting-cover&name=${encodeURIComponent(userName)}`;
       } else {
-        window.location.href = '/?scene=meeting-cover';
+        window.location.href = '/dm?scene=meeting-cover';
       }
     }
   };
@@ -263,7 +263,7 @@ const ChatScene: React.FC<ChatSceneProps> = ({ userName, onBack, onNext }) => {
         <div className={styles.chatTitle}>
           <div className={styles.chatIcon}>
             <Image 
-              src="/Ayu.png" 
+              src="/dm/Ayu.png" 
               alt="Profile" 
               width={40} 
               height={40} 
@@ -384,7 +384,7 @@ const ChatScene: React.FC<ChatSceneProps> = ({ userName, onBack, onNext }) => {
           <div className="p-6 text-center">
             <div className="flex justify-center mb-4">
               <Image
-                src="/GIF/ezgif.com-animated-gif-maker-9.gif"
+                src="/dm/GIF/ezgif.com-animated-gif-maker-9.gif"
                 alt="Meeting Invitation"
                 width={200}
                 height={200}

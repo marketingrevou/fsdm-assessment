@@ -95,7 +95,7 @@ const M3Q3Scene: React.FC<M3Q3SceneProps> = ({ onBack, onNext, userName }) => {
             
             <div className="relative w-full aspect-square mb-4 rounded-xl overflow-hidden">
               <Image
-                src="/GIF/ezgif.com-animated-gif-maker-14.gif"
+                src="/dm/GIF/ezgif.com-animated-gif-maker-14.gif"
                 alt="Celebration Animation"
                 layout="fill"
                 objectFit="contain"
@@ -137,7 +137,7 @@ const M3Q3Scene: React.FC<M3Q3SceneProps> = ({ onBack, onNext, userName }) => {
                 
                 <div className="relative w-full max-w-xs xl:max-w-sm aspect-square rounded-xl overflow-hidden">
                   <Image
-                    src="/GIF/ezgif.com-animated-gif-maker-14.gif"
+                    src="/dm/GIF/ezgif.com-animated-gif-maker-14.gif"
                     alt="Celebration Animation"
                     layout="fill"
                     objectFit="contain"
